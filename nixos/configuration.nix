@@ -117,7 +117,7 @@
   users.users = {
     djinn = {
       # Be sure to change this (using passwd) after rebooting!
-      # initialPassword = "correcthorsebatterystaple";
+      # initialPassword = "personwomanmancameratv"
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         # TODO: Add SSH public key(s) here
