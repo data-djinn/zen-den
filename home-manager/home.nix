@@ -8,17 +8,12 @@
 
     # Feel free to split up your configuration and import pieces of it here.
   ];
-
+  
   xsession.enable = true;
   home = {
     username = "djinn";
     homeDirectory = "/home/djinn";
     
-    sessionVariables = {  # env vars to always set at login
-      EDITOR = "nvim";
-      TERM = "kitty";
-    };
-
     keyboard = {
       layout = "us";
       variant = "dvorak";
@@ -29,7 +24,6 @@
     packages = with pkgs; [
       curl
       gh
-      kitty
       librewolf
       redshift
       pfetch
@@ -42,6 +36,11 @@
   programs = {
     bash = {
       enable = true;
+
+      bashrcExtra = "
+        export EDITOR=nvim
+	export TERMINAL=kitty";  # for i3 terminal launch
+
       initExtra = "pfetch";
       shellAliases = {
         ls = "ls --color=auto";
@@ -53,7 +52,15 @@
         count = "find . -type f | wc -l";
         cpv = "rsync -ah --info=progress2";
 	gs = "git fetch && git status";
+	ga = "git fetch && git add";
+	gc = "git commit -m";
       };
+    };
+
+    kitty = {
+      enable = true;
+      font.name = "DejaVu Sans";
+      font.size = 8;
     };
 
     neovim = {
