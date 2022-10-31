@@ -73,6 +73,8 @@
       enable = true;
       path = "$HOME/nix-config/home-manager";
     };
+
+    rbw.enable = true;  # bitwarden cli client TODO: self-host
   };
   
   manual.html.enable = true;  # view with `home-manager-help`
