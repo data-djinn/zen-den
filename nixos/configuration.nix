@@ -18,6 +18,10 @@
     # You can also split up your configuration and import pieces of it here.
   ];
 
+  # =========================
+  # CUSTOM BOOT CONFIG
+  # =========================
+
   boot.loader = {
     systemd-boot.enable = true;
     # this may need to change during setup of new workstation
@@ -38,6 +42,7 @@
   # =========================
   # CUSTOM HARDWARE CONFIG
   # =========================
+
   # FIXME: NVIDIA PROPRIETARY HARDWARE CONFIG
   services.xserver.videoDrivers = [ "nvidia" ];
 
@@ -57,6 +62,9 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  # =========================
+  # BEGIN GENERAL CONFIG
+  # =========================
   nix = {
     # This will add each flake input as a registry
     # To make nix3 commands consistent with your flake
