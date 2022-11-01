@@ -27,6 +27,7 @@
       librewolf
       redshift
       pfetch
+      obsidian
       python3
       zenith
     ];
@@ -39,7 +40,7 @@
 
       bashrcExtra = "
         export EDITOR=nvim
-	export TERMINAL=kitty";  # for i3 terminal launch
+	export TERM=kitty";  # for i3 terminal launch
 
       initExtra = "pfetch";
       shellAliases = {
