@@ -102,7 +102,12 @@
     xkbVariant = "dvorak";
     xkbOptions = "caps:swapescape"; # use caps lock as escape key
 
-    libinput.enable = true;  # only required for laptops with touchpad
+    libinput = {
+      enable = true;
+      touchpad = {
+        disableWhileTyping = true;  # only required for laptops with touchpad
+        tapping = true;
+    };
 
     desktopManager.xterm.enable = false;
     displayManager = {
@@ -114,8 +119,8 @@
       enable = true;
       extraPackages = with pkgs; [
         dmenu # app launch bar (ctrl + E)
-	i3status  # default i3 status bar
-	i3lock  # lock/login screen
+	    i3status  # default i3 status bar
+	    i3lock  # lock/login screen
       ];
     };
   };

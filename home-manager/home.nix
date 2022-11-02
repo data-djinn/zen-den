@@ -66,8 +66,8 @@
     alacritty = {
       enable = true;
       settings = {
-        size = 8.0
-      }
+        size = 8.0;
+      };
     };
 
     # TODO: move to seperate flake!
