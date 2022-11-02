@@ -33,14 +33,19 @@
     ];
   };
 
-  # Add stuff for your user as you see fit:
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+    TERMINAL = "alacritty";
+  };
+
   programs = {
     bash = {
       enable = true;
 
       bashrcExtra = "
         export EDITOR=nvim
-	export TERM=kitty";  # for i3 terminal launch
+	    export TERMINAL=alacritty";  # for i3 terminal launch
 
       initExtra = "pfetch";
       shellAliases = {
@@ -52,22 +57,61 @@
         "..." = "cd ../..";
         count = "find . -type f | wc -l";
         cpv = "rsync -ah --info=progress2";
-	gs = "git fetch && git status";
-	ga = "git fetch && git add";
-	gc = "git commit -m";
+	    gs = "git fetch && git status";
+	    ga = "git fetch && git add";
+	    gc = "git commit -m";
       };
     };
 
-    kitty = {
+    alacritty = {
       enable = true;
-      font.name = "DejaVu Sans";
-      font.size = 8;
+      settings = {
+        size = 8.0
+      }
     };
 
+    # TODO: move to seperate flake!
     neovim = {
       enable = true;
       viAlias = true;
       vimAlias = true;
+      withPython3 = true;
+      plugins = with pkgs.vimPlugins; [
+        vim-nix
+	    jedi-vim
+	    vim-airline
+	    vim-airline-themes
+	    molokai
+	    vim-commentary
+	    indentLine
+      ];
+      extraConfig = "
+        set fileencoding=utf-8
+
+        set backspace=indent,eol,start
+
+        set tabstop=4
+        set softtabstop=0
+        set shiftwidth=4
+        set expandtab
+
+        set hlsearch
+        set incsearch
+        set ignorecase
+        set smartcase
+
+        syntax on
+        set ruler
+        set number
+
+        colorscheme molokai
+
+        set wildmenu
+
+        let g:indentLine_enabled = 1
+        let g:indendLink_concealcursor = ''
+        let g:indentLine_faster = 1
+      ";
     };
 
     git = {
