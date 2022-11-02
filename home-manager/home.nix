@@ -128,6 +128,7 @@
   # Nicely reload system units when changing configs
   systemd.user = {
     startServices = "sd-switch";
+    sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
       TERMINAL = "alacritty";

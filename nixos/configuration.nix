@@ -107,6 +107,7 @@
       touchpad = {
         disableWhileTyping = true;  # only required for laptops with touchpad
         tapping = true;
+      };
     };
 
     desktopManager.xterm.enable = false;
@@ -124,6 +125,10 @@
       ];
     };
   };
+
+  # Enable automatic location
+  services.geoclue2.enable = true;  # TODO: restrict to specific users
+  location.provider = "geoclue2";
 
   console.keyMap = "dvorak";
 
