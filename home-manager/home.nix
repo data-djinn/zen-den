@@ -19,6 +19,12 @@
       options = [ "caps: swapescape" ];  # use caps lock as escape key
     };
 
+    sessionVariables = {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+      TERMINAL = "alacritty";
+    };
+
     # add user packages here!
     packages = with pkgs; [
       curl
@@ -54,8 +60,8 @@
     alacritty = {
       enable = true;
       settings = {
-        size = 8.0;
-      };
+        font.size = 6.0;
+        };
     };
 
     # TODO: move to seperate flake!
@@ -128,11 +134,6 @@
   # Nicely reload system units when changing configs
   systemd.user = {
     startServices = "sd-switch";
-    sessionVariables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-      TERMINAL = "alacritty";
-    };
   };
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "22.05";
