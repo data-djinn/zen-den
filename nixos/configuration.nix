@@ -1,7 +1,18 @@
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
 
-{ inputs, lib, config, pkgs, ... }: {
+{ inputs, lib, config, pkgs, ... }:
+
+let  # env vars required for finegrained 
+  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
+    export __NV_PRIME_RENDER_OFFLOAD=1
+    export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-GO
+    export __GLX_VENDOR_LIBRARY_NAME=nvidia::
+    export __VK_LAYER_NV_optimus=NVIDIA_only
+    exec "$@"
+  '';
+in
+{
 
   imports = [
     # If you want to use modules from other flakes (such as nixos-hardware), use something like:
@@ -42,19 +53,45 @@
   # =========================
   # CUSTOM HARDWARE CONFIG
   # =========================
-
-  # FIXME: NVIDIA PROPRIETARY HARDWARE CONFIG
+  
+  # Install latest nvidia driver
   services.xserver.videoDrivers = [ "nvidia" ];
+
+  # install shell script defined above
+  environment.systemPackages = [ nvidia-offload ];
+
+  # enable secondary monitors at boot time
+  specialisation = {
+    external-display.configuration = {
+      system.nixos.tags = [ "external-display" ];
+      hardware.nvidia = {
+        prime.offload.enable = lib.mkForce false;
+        powerManagement = {
+          enable = lib.mkForce false;
+          finegrained = lib.mkForce false;
+        };
+      };
+    };
+  };
 
   hardware.opengl = {
     enable = true;
     driSupport = true;
   };
 
-  hardware.nvidia.prime = {
-    sync.enable = true;
-    nvidiaBusId = "PCI:1:00:0";
-    intelBusId = "PCI:0:2:0";
+  hardware.nvidia = {
+    prime = {
+      offload.enable = true;
+
+      # FIXME: nix-shell -p lshw --run "lshw -c display"
+      nvidiaBusId = "PCI:1:00:0";
+      intelBusId = "PCI:0:2:0";
+    };
+
+    powerManagement = {
+      enable = true;  # enable systemd-based graphical suspend to prevent black screen on resume
+      finegrained = true;  # power down GPU when no applications are running that require nvidia
+    };
   };
 
   # Misc. hardware config TODO: mv to hardware-configuration.nix?
@@ -89,7 +126,7 @@
   };
 
   networking = {
-    hostName = "obelisk"; 
+    hostName = "obelisk";  # FIXME
     networkmanager.enable = true;
   };
 
@@ -126,15 +163,6 @@
     };
   };
 
-  # create sym link to wallpaper file in repo
-  systemd.user.services.wallpaper-setter = {
-    script = ''
-        ln -sf ${config.users.users.djinn.home}/nix-config/nixos/nix_flakes_background.png ${config.users.users.djinn.home}/.background-image
-      '';
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
-    };
-
   # Enable automatic location
   services.geoclue2.enable = true;  # TODO: restrict to specific users
   location.provider = "geoclue2";
@@ -143,7 +171,7 @@
 
   users.users = {
     djinn = {
-      # Be sure to change this (using passwd) after rebooting!
+      # FIXME: Be sure to change this (using passwd) after rebooting!
       # initialPassword = "personwomanmancameratv"
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
@@ -152,6 +180,15 @@
       extraGroups = [ "wheel" "networkmanager" "docker" ];
     };
   };
+
+  # create sym link to wallpaper file in repo
+  systemd.user.services.wallpaper-setter = {
+    script = ''
+        ln -sf ${config.users.users.djinn.home}/nix-config/nixos/nix_flakes_background.png ${config.users.users.djinn.home}/.background-image
+      '';
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+    };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "22.05";
