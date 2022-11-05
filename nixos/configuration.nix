@@ -126,6 +126,15 @@
     };
   };
 
+  # create sym link to wallpaper file in repo
+  systemd.user.services.wallpaper-setter = {
+    script = ''
+        ln -sf ${config.users.users.djinn.home}/nix-config/nixos/nix_flakes_background.png ${config.users.users.djinn.home}/.background-image
+      '';
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+    };
+
   # Enable automatic location
   services.geoclue2.enable = true;  # TODO: restrict to specific users
   location.provider = "geoclue2";
