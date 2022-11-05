@@ -45,8 +45,8 @@
       shellAliases = {
         ls = "ls --color=auto";
         ll = "ls -lA";
-        lm = "ls -t -1";
-        lt = "ls --human-readable --size -1 -S --classify";
+        lm = "ls -lt -1";
+        lt = "ls --human-readable --size -1 -Sl--classify";
         ".." = "cd ..";
         "..." = "cd ../..";
         count = "find . -type f | wc -l";
@@ -54,6 +54,7 @@
         gs = "git fetch && git status";
         ga = "git fetch && git add";
         gc = "git commit -m";
+        gd = "git diff";
       };
     };
 
