@@ -178,8 +178,15 @@ in
       openssh.authorizedKeys.keys = [
         # TODO: Add SSH public key(s) here
       ];
+      # TODO: replace sudo with doas
       extraGroups = [ "wheel" "networkmanager" "docker" ];
     };
+  };
+
+  # TODO: replace sudo with doas?
+  security.sudo = {
+    enable = true;
+    execWheelOnly = true;  # patch for CVE-2021-3156
   };
 
   # create sym link to wallpaper file in repo
