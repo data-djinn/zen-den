@@ -43,6 +43,7 @@
 
       initExtra = "pfetch";
       shellAliases = {
+        nixos-rebuild = "sudo nixos-rebuild";  # I always mess this one up!
         ls = "ls --color=auto";
         ll = "ls -lA";
         lm = "ls -lt -1";
