@@ -124,7 +124,7 @@
 
     rbw.enable = true;  # bitwarden cli client TODO: self-host
   };
-
+  
     # reduce blue light after sunset
     services.redshift = {
       enable = true;
@@ -133,10 +133,6 @@
   
   manual.html.enable = true;  # view with `home-manager-help`
 
-  # Nicely reload system units when changing configs
-  systemd.user = {
-    startServices = "sd-switch";
-  };
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "22.05";
 }
