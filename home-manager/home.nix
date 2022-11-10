@@ -119,7 +119,7 @@
 
     home-manager = {
       enable = true;
-      path = "$HOME/nix-config/home-manager";
+      # TODO: fix this path = "$HOME/nix-config/home-manager";
     };
 
     rbw.enable = true;  # bitwarden cli client TODO: self-host
