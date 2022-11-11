@@ -128,6 +128,13 @@
     services.redshift = {
       enable = true;
       provider = "geoclue2";
+      temperature.day = 6500;
+      temperature.night = 3000;
+      settings = {
+        redshift = {
+          brightness-night = 0.4;
+        };
+      };
     };
   
   manual.html.enable = true;  # view with `home-manager-help`
