@@ -32,6 +32,7 @@
       librewolf
       pfetch
       obsidian
+      python3
       zenith
     ];
   };
