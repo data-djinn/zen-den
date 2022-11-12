@@ -33,6 +33,7 @@
       pfetch
       obsidian
       python3
+      nheko
       zenith
     ];
   };
@@ -63,25 +64,49 @@
       enable = true;
       settings = {
         font.size = 6.0;
-        };
+      };
     };
 
     # TODO: move to seperate flake!
     neovim = {
+      coc.enable = true;
       enable = true;
       viAlias = true;
       vimAlias = true;
       withPython3 = true;
       plugins = with pkgs.vimPlugins; [
+        # general
+        indentLine  # shows line
+        vim-commentary  # `gcc` to comment out/in a line; `gc` for motion/viz
+                        # use e.g. `:97,98Commentary` to specify a range
+        ale  # async lint engine
+
+        # elm extensions
+        elm-vim
+
+        # haskell extensions
+        neco-ghc
+        vim2hs
+
+        # git extensions
+        vim-fugitive
+        # vim-gitgutter
+
+        # nix extensions
         vim-nix
+
+        # python extensions
         jedi-vim
-        vim-airline
-        vim-airline-themes
+
+        # scala extensons
+        vim-scala
+
+        # theme
         molokai
-        vim-commentary
-        indentLine
+        vim-airline
       ];
-      extraConfig = "
+
+      extraConfig = ''
       set fileencoding=utf-8
 
       set backspace=indent,eol,start
@@ -104,10 +129,30 @@
 
       set wildmenu
 
+      "" always show status bar
+      set laststatus=2
+
+      "" center screen on search match
+      nnoremap n nnzzzv
+      nnoremap N Nzzzv
+
       let g:indentLine_enabled = 1
-      let g:indendLink_concealcursor = ''
       let g:indentLine_faster = 1
-      ";
+
+      command! FixWhitespace :%s/\s\+$//e
+
+      augroup vimrc-sync-fromstart
+        autocmd!
+        autocmd BufEnter * :syntax sync maxlines=200
+      augroup END
+
+      augroup vimrc-remember-cursor-position
+        autocmd!
+        autocmd BufReadPost* if line("'\"") > 1 && line("'\"") <=line("$") | exe "normal! g`\"" | endif
+      augroup END
+
+      set autoread
+      '';
     };
 
     git = {
@@ -124,7 +169,7 @@
 
     rbw.enable = true;  # bitwarden cli client TODO: self-host
   };
-  
+
     # reduce blue light after sunset
     services.redshift = {
       enable = true;
@@ -137,7 +182,7 @@
         };
       };
     };
-  
+
   manual.html.enable = true;  # view with `home-manager-help`
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
