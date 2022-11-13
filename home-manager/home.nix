@@ -69,17 +69,46 @@
 
     # TODO: move to seperate flake!
     neovim = {
-      coc.enable = true;
       enable = true;
+      withPython3 = true;
+      coc = {
+        enable = true;
+        settings = {
+          "suggest.noselect" = true;
+          "suggest.enablePreview" = true;
+          "suggest.enablePreselect" = true;
+          "suggest.disableKind" = true;
+          languageserver = {
+            haskell = {
+              command = "haskell-language-server-wrapper";
+              args = [ "--lsp"  ];
+              rootPatterns = [
+                "*.cabal"
+                "stack.yaml"
+                "cabal.project"
+                "package.yaml"
+                "hie.yaml"
+              ];
+              filetypes = [ "haskell" "lhaskell" ];
+            };
+            nix = {
+              command = "rnix-lsp";
+              filetypes = ["nix"];
+            };
+          };
+        };
+      };
+
       viAlias = true;
       vimAlias = true;
-      withPython3 = true;
       plugins = with pkgs.vimPlugins; [
         # general
         indentLine  # shows line
         vim-commentary  # `gcc` to comment out/in a line; `gc` for motion/viz
                         # use e.g. `:97,98Commentary` to specify a range
         ale  # async lint engine
+        coc-nvim
+        coc-python
 
         # elm extensions
         elm-vim
@@ -92,8 +121,8 @@
         vim-fugitive
         # vim-gitgutter
 
-        # nix extensions
-        vim-nix
+          # nix extensions
+          vim-nix
 
         # python extensions
         jedi-vim
@@ -107,52 +136,58 @@
       ];
 
       extraConfig = ''
-      set fileencoding=utf-8
+        set fileencoding=utf-8
 
-      set backspace=indent,eol,start
+        set expandtab
+        set number
+        set shiftwidth=4
+        set smartcase
+        set tabstop=4
 
-      set tabstop=4
-      set softtabstop=0
-      set shiftwidth=4
-      set expandtab
+        set backspace=indent,eol,start
 
-      set hlsearch
-      set incsearch
-      set ignorecase
-      set smartcase
+        set softtabstop=0
 
-      syntax on
-      set ruler
-      set number
+        set hlsearch
+        set incsearch
+        set ignorecase
+        set smartcase
 
-      colorscheme molokai
+        syntax on
 
-      set wildmenu
+        colorscheme molokai
 
-      "" always show status bar
-      set laststatus=2
+        set wildmenu
 
-      "" center screen on search match
-      nnoremap n nnzzzv
-      nnoremap N Nzzzv
+        "" always show status bar
+        set laststatus=2
 
-      let g:indentLine_enabled = 1
-      let g:indentLine_faster = 1
+        "" center screen on search match
+        nnoremap n nnzzzv
+        nnoremap N Nzzzv
 
-      command! FixWhitespace :%s/\s\+$//e
+        let g:indentLine_enabled = 1
+        let g:indentLine_faster = 1
 
-      augroup vimrc-sync-fromstart
-        autocmd!
-        autocmd BufEnter * :syntax sync maxlines=200
-      augroup END
+        command! FixWhitespace :%s/\s\+$//e
 
-      augroup vimrc-remember-cursor-position
-        autocmd!
-        autocmd BufReadPost* if line("'\"") > 1 && line("'\"") <=line("$") | exe "normal! g`\"" | endif
-      augroup END
+        augroup vimrc-sync-fromstart
+          autocmd!
+          autocmd BufEnter * :syntax sync maxlines=200
+        augroup END
 
-      set autoread
+        set autoread
       '';
+      extraPackages = with pkgs; [
+        (python3.withPackages (ps: with ps; [
+          black
+          flake8
+        ]))
+        nodejs  # required for coc
+      ];
+      extraPython3Packages = (ps: with ps; [
+        jedi
+      ]);
     };
 
     git = {
@@ -169,6 +204,7 @@
 
     rbw.enable = true;  # bitwarden cli client TODO: self-host
   };
+  xdg.configFile."nvim/coc-settings.json".text = builtins.readFile ./coc-settings.json;
 
     # reduce blue light after sunset
     services.redshift = {
