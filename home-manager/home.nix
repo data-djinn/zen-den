@@ -25,14 +25,23 @@
     };
 
     # add user packages here!
-    packages = with pkgs; [
+    packages = with pkgs;
+    let
+      python-linters = python-packages: with python-packages; [
+        flake8
+        flake8-bugbear
+        bandit
+        black
+      ];
+      python-with-linters = python3.withPackages python-linters;
+    in
+    [
       curl
       gh
       librewolf
       pfetch
       obsidian
-      python3
-      nheko
+      python-with-linters
       zenith
     ];
   };
