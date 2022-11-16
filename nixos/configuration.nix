@@ -3,7 +3,7 @@
 
 { inputs, lib, config, pkgs, ... }:
 
-let  # env vars required for finegrained 
+let  # env vars required for finegrained
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-GO
@@ -25,35 +25,30 @@ in
 
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
-
     # You can also split up your configuration and import pieces of it here.
+    ./erase_your_darlings.nix
   ];
 
   # =========================
   # CUSTOM BOOT CONFIG
   # =========================
 
-  boot.loader = {
-    systemd-boot.enable = true;
-    # this may need to change during setup of new workstation
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot/efi";
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      # this may need to change during setup of new workstation
+      efi = {
+        canTouchEfiVariables = true;
+      };
     };
-  };
-
-  boot.initrd.secrets = { "/crypto_keyfile.bin" = null; };
-
-  # FIXME: change swap device if extra ram is desired
-  boot.initrd.luks.devices."luks-aa02f40a-1e0b-4b50-b7ad-0ac9d24af4ef" = {
-    device = "/dev/disk/by-uuid/aa02f40a-1e0b-4b50-b7ad-0ac9d24af4ef";
-    keyFile = "/crypto_keyfile.bin";
+    kernelPackages = pkgs.linuxPackages_latest;
+    supportedFilesystems = [ "btrfs" ];
   };
 
   # =========================
   # CUSTOM HARDWARE CONFIG
   # =========================
-  
+
   # Install latest nvidia driver
   services.xserver.videoDrivers = [ "nvidia" ];
 
@@ -173,7 +168,7 @@ in
   users.users = {
     djinn = {
       # FIXME: Be sure to change this (using passwd) after rebooting!
-      # initialPassword = "personwomanmancameratv"
+      initialPassword = "personwomanmancameratv";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         # TODO: Add SSH public key(s) here

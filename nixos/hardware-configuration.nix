@@ -12,21 +12,42 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  
+  nixpkgs.system = "x86_64-linux";
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/68087afa-e485-4a4c-9b7f-f0d144f1cca3";
-      fsType = "ext4";
+    { device = "/dev/disk/by-uuid/efccdf55-1b99-4007-8369-4f8fbfd57a4c";
+      fsType = "btrfs";
+      options = [ "subvol=root" ];
     };
 
-  boot.initrd.luks.devices."luks-6c84d78b-8e0a-4702-9a30-c22507566473".device = "/dev/disk/by-uuid/6c84d78b-8e0a-4702-9a30-c22507566473";
+  boot.initrd.luks.devices."enc".device = "/dev/disk/by-uuid/563a93c6-eda5-41f2-ac3a-764228df3f98";
 
-  fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/91F3-C092";
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/efccdf55-1b99-4007-8369-4f8fbfd57a4c";
+      fsType = "btrfs";
+      options = [ "subvol=home" ];
+    };
+
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-uuid/efccdf55-1b99-4007-8369-4f8fbfd57a4c";
+      fsType = "btrfs";
+      options = [ "subvol=nix" ];
+    };
+
+  fileSystems."/persist" =
+    { device = "/dev/disk/by-uuid/efccdf55-1b99-4007-8369-4f8fbfd57a4c";
+      fsType = "btrfs";
+      options = [ "subvol=persist" ];
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/477E-619C";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/1e38fa8f-4488-45ae-8b01-280b88979c18"; }
+    [ { device = "/dev/disk/by-uuid/47adadb2-02df-49b4-aa5f-b6ab0152ecc3"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -39,7 +60,4 @@
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
-  # FIXME: update system type (needed for flakes)
-  nixpkgs.hostPlatform = "x86_64-linux";
 }
