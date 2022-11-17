@@ -42,6 +42,7 @@
       pfetch
       obsidian
       python-with-linters
+      ripgrep
       zenith
     ];
   };
