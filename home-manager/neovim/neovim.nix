@@ -53,8 +53,8 @@
       vim-fugitive
       # vim-gitgutter
 
-        # nix extensions
-        vim-nix
+      # nix extensions
+      vim-nix
 
       # python extensions
       jedi-vim

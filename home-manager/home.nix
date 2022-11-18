@@ -1,7 +1,7 @@
+{ inputs, lib, config, pkgs, ... }: {
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 
-{ inputs, lib, config, pkgs, ... }: {
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors), use something like:
     # inputs.nix-colors.homeManagerModule
@@ -39,8 +39,9 @@
       curl
       gh
       librewolf
+      obsidian  # TODO: add overlay to include plugins & vault already connected
       pfetch
-      obsidian
+      protonvpn-cli
       python-with-linters
       ripgrep
       zenith
@@ -88,7 +89,14 @@
       # TODO: fix this path = "$HOME/nix-config/home-manager";
     };
 
-    rbw.enable = true;  # bitwarden cli client TODO: self-host
+    rbw = {
+      enable = true;  # bitwarden cli client
+      settings = {
+        email = "data-djinn@pm.me";
+        # identity_url = "?"; TODO: self-host
+        lock_timeout = 300;
+      };
+    };
   };
 
     # reduce blue light after sunset
