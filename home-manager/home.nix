@@ -1,6 +1,6 @@
 { inputs, lib, config, pkgs, ... }: {
-# This is your home-manager configuration file
-# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
+  # This is your home-manager configuration file
+  # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors), use something like:
@@ -15,7 +15,7 @@
     keyboard = {
       layout = "us";
       variant = "dvorak";
-      options = [ "caps: swapescape" ];  # use caps lock as escape key
+      options = [ "caps: swapescape" ]; # use caps lock as escape key
     };
 
     sessionVariables = {
@@ -26,26 +26,26 @@
 
     # add user packages here!
     packages = with pkgs;
-    let
-      python-linters = python-packages: with python-packages; [
-        flake8
-        flake8-bugbear
-        bandit
-        black
+      let
+        python-linters = python-packages: with python-packages; [
+          flake8
+          flake8-bugbear
+          bandit
+          black
+        ];
+        python-with-linters = python3.withPackages python-linters;
+      in
+      [
+        curl
+        gh
+        librewolf
+        obsidian # TODO: add overlay to include plugins & vault already connected
+        pfetch
+        protonvpn-cli
+        python-with-linters
+        ripgrep
+        zenith
       ];
-      python-with-linters = python3.withPackages python-linters;
-    in
-    [
-      curl
-      gh
-      librewolf
-      obsidian  # TODO: add overlay to include plugins & vault already connected
-      pfetch
-      protonvpn-cli
-      python-with-linters
-      ripgrep
-      zenith
-    ];
   };
 
   programs = {
@@ -54,7 +54,7 @@
 
       initExtra = "pfetch";
       shellAliases = {
-        nixos-rebuild = "sudo nixos-rebuild";  # I always mess this one up!
+        nixos-rebuild = "sudo nixos-rebuild"; # I always mess this one up!
         ls = "ls --color=auto";
         ll = "ls -lA";
         lm = "ls -lt -1";
@@ -78,7 +78,7 @@
     };
 
     git = {
-      enable= true;
+      enable = true;
       userName = "data-djinn";
       userEmail = "data-djinn@pm.me";
       diff-so-fancy.enable = true;
@@ -90,7 +90,7 @@
     };
 
     rbw = {
-      enable = true;  # bitwarden cli client
+      enable = true; # bitwarden cli client
       settings = {
         email = "data-djinn@pm.me";
         # identity_url = "?"; TODO: self-host
@@ -99,20 +99,20 @@
     };
   };
 
-    # reduce blue light after sunset
-    services.redshift = {
-      enable = true;
-      provider = "geoclue2";
-      temperature.day = 6500;
-      temperature.night = 3000;
-      settings = {
-        redshift = {
-          brightness-night = 0.4;
-        };
+  # reduce blue light after sunset
+  services.redshift = {
+    enable = true;
+    provider = "geoclue2";
+    temperature.day = 6500;
+    temperature.night = 3000;
+    settings = {
+      redshift = {
+        brightness-night = 0.4;
       };
     };
+  };
 
-  manual.html.enable = true;  # view with `home-manager-help`
+  manual.html.enable = true; # view with `home-manager-help`
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "22.05";

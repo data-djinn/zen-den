@@ -56,7 +56,7 @@
   nix = {
     settings = {
       experimental-features = "nix-command flakes";
-      auto-optimise-store = true;  # Deduplicate and optimize nix store
+      auto-optimise-store = true; # Deduplicate and optimize nix store
     };
   };
 
@@ -67,7 +67,7 @@
   };
 
   networking = {
-    hostName = "obelisk";  # FIXME
+    hostName = "obelisk"; # FIXME
     networkmanager.enable = true;
   };
 
@@ -83,14 +83,14 @@
     libinput = {
       enable = true;
       touchpad = {
-        disableWhileTyping = true;  # only required for laptops with touchpad
+        disableWhileTyping = true; # only required for laptops with touchpad
         tapping = true;
       };
     };
 
     desktopManager.xterm.enable = false;
     displayManager = {
-      defaultSession = "none+i3";  # no desktop, i3 tiling wm
+      defaultSession = "none+i3"; # no desktop, i3 tiling wm
       lightdm.enable = true;
     };
 
@@ -98,14 +98,14 @@
       enable = true;
       extraPackages = with pkgs; [
         dmenu # app launch bar (ctrl + E)
-	    i3status  # default i3 status bar
-	    i3lock  # lock/login screen
+        i3status # default i3 status bar
+        i3lock # lock/login screen
       ];
     };
   };
 
   # Enable automatic location
-  services.geoclue2.enable = true;  # TODO: restrict to specific users
+  services.geoclue2.enable = true; # TODO: restrict to specific users
   location.provider = "geoclue2";
   services.localtimed.enable = true;
 
@@ -127,17 +127,17 @@
   # TODO: replace sudo with doas?
   security.sudo = {
     enable = true;
-    execWheelOnly = true;  # patch for CVE-2021-3156
+    execWheelOnly = true; # patch for CVE-2021-3156
   };
 
   # create sym link to wallpaper file in repo
   systemd.user.services.wallpaper-setter = {
     script = ''
-        ln -sf ${config.users.users.djinn.home}/nix-config/nixos/nix_flakes_background.jpeg ${config.users.users.djinn.home}/.background-image
-      '';
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
-    };
+      ln -sf ${config.users.users.djinn.home}/nix-config/nixos/nix_flakes_background.jpeg ${config.users.users.djinn.home}/.background-image
+    '';
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+  };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "22.05";

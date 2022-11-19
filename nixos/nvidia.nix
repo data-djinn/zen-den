@@ -1,6 +1,6 @@
-{pkgs,lib, ...}:
+{ pkgs, lib, ... }:
 
-let  # env vars required for finegrained
+let # env vars required for finegrained
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-GO
@@ -49,8 +49,8 @@ in
     };
 
     powerManagement = {
-      enable = true;  # enable systemd-based graphical suspend to prevent black screen on resume
-      finegrained = true;  # power down GPU when no applications are running that require nvidia
+      enable = true; # enable systemd-based graphical suspend to prevent black screen on resume
+      finegrained = true; # power down GPU when no applications are running that require nvidia
     };
   };
 }

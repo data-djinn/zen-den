@@ -1,4 +1,4 @@
-{pkgs, inputs, system, ... }:
+{ pkgs, inputs, system, ... }:
 {
   programs.neovim = {
     enable = true;
@@ -13,7 +13,7 @@
         languageserver = {
           haskell = {
             command = "haskell-language-server-wrapper";
-            args = [ "--lsp"  ];
+            args = [ "--lsp" ];
             rootPatterns = [
               "*.cabal"
               "stack.yaml"
@@ -25,7 +25,7 @@
           };
           nix = {
             command = "rnix-lsp";
-            filetypes = ["nix"];
+            filetypes = [ "nix" ];
           };
         };
       };
@@ -35,10 +35,10 @@
     vimAlias = true;
     plugins = with pkgs.vimPlugins; [
       # general
-      indentLine  # shows line
-      vim-commentary  # `gcc` to comment out/in a line; `gc` for motion/viz
-                      # use e.g. `:97,98Commentary` to specify a range
-      ale  # async lint engine
+      indentLine # shows line
+      vim-commentary # `gcc` to comment out/in a line; `gc` for motion/viz
+      # use e.g. `:97,98Commentary` to specify a range
+      ale # async lint engine
       coc-nvim
       coc-python
 
@@ -74,7 +74,7 @@
         black
         flake8
       ]))
-      nodejs  # required for coc
+      nodejs # required for coc
       haskell-language-server
       rnix-lsp
     ];

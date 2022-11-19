@@ -1,16 +1,16 @@
-{pkgs, ...}:
+{ pkgs, ... }:
 
 {
   environment.etc = {
     nixos.source = "/persist/etc/nixos";
     "NetworkManager/system-connections".source = "/persist/etc/NetworkManager/system-connections";
     adjtime.source = "/persist/etc/adjtime"; # persist files' last modified date across reboots
-    NIXOS.source = "/persist/etc/NIXOS";  # TODO: where is this used?
+    NIXOS.source = "/persist/etc/NIXOS"; # TODO: where is this used?
     machine-id.source = "/persist/etc/machine-id";
     passwd.source = "/persist/etc/passwd";
     shadow.source = "/persist/etc/shadow";
   };
-  
+
   boot.initrd.postDeviceCommands = pkgs.lib.mkBefore ''
     mkdir -p /mnt
     mount -o subvol=/ /dev/mapper/enc /mnt
@@ -29,5 +29,5 @@
     btrfs subvolume snapshot /mnt/root-blank /mnt/root
 
     umount /mnt    
-    '';
+  '';
 }
