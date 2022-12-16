@@ -7,8 +7,6 @@
     adjtime.source = "/persist/etc/adjtime"; # persist files' last modified date across reboots
     NIXOS.source = "/persist/etc/NIXOS"; # TODO: where is this used?
     machine-id.source = "/persist/etc/machine-id";
-    passwd.source = "/persist/etc/passwd";
-    shadow.source = "/persist/etc/shadow";
   };
 
   boot.initrd.postDeviceCommands = pkgs.lib.mkBefore ''
