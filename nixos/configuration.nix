@@ -17,6 +17,8 @@
     ./hardware-configuration.nix
     # You can also split up your configuration and import pieces of it here.
     ./erase_your_darlings.nix
+    ./podman.nix
+    ./homelab/home_assistant.nix
     ./nvidia.nix
   ];
 
