@@ -10,10 +10,6 @@ let # env vars required for finegrained
   '';
 in
 {
-  # =========================
-  # CUSTOM HARDWARE CONFIG
-  # =========================
-
   # Install latest nvidia driver
   services.xserver.videoDrivers = [ "nvidia" ];
 
@@ -42,15 +38,18 @@ in
   hardware.nvidia = {
     prime = {
       offload.enable = true;
-
-      # FIXME: nix-shell -p lshw --run "lshw -c display"
+      
+     # TODO: move to machine-specific config
+     # FIXME: nix-shell -p lshw --run "lshw -c display"
       nvidiaBusId = "PCI:1:00:0";
       intelBusId = "PCI:0:2:0";
     };
 
     powerManagement = {
-      enable = true; # enable systemd-based graphical suspend to prevent black screen on resume
-      finegrained = true; # power down GPU when no applications are running that require nvidia
+      # enable systemd-based graphical suspend to prevent black screen on resume
+      enable = true;
+      # power down GPU when no applications are running that require nvidia
+      finegrained = true;
     };
   };
 }

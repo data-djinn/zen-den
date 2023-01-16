@@ -15,11 +15,10 @@
 
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
-    # You can also split up your configuration and import pieces of it here.
     ./erase_your_darlings.nix
     ./podman.nix
-    ./homelab/home_assistant.nix
-    ./nvidia.nix
+    ../modules/system/devices/touchpad
+    ../modules/system/devices/gpu/nvidia
   ];
 
   # =========================
@@ -81,14 +80,6 @@
     layout = "us";
     xkbVariant = "dvorak";
     xkbOptions = "caps:swapescape"; # use caps lock as escape key
-
-    libinput = {
-      enable = true;
-      touchpad = {
-        disableWhileTyping = true; # only required for laptops with touchpad
-        tapping = true;
-      };
-    };
 
     desktopManager.xterm.enable = false;
     displayManager = {
