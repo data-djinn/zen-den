@@ -38,9 +38,9 @@ in
   hardware.nvidia = {
     prime = {
       offload.enable = true;
-      
-     # TODO: move to machine-specific config
-     # FIXME: nix-shell -p lshw --run "lshw -c display"
+
+      # TODO: move to machine-specific config
+      # FIXME: nix-shell -p lshw --run "lshw -c display"
       nvidiaBusId = "PCI:1:00:0";
       intelBusId = "PCI:0:2:0";
     };

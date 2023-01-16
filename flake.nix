@@ -77,7 +77,7 @@
           specialArgs = { inherit inputs; }; # Pass flake inputs to our config
           modules = (builtins.attrValues nixosModules) ++ [
             # > Our main nixos configuration file <
-            ./nixos/configuration.nix
+            ./machines/obelisk
           ];
         };
       };

@@ -14,11 +14,13 @@
     # and import modules relevant to your hardware.
 
     # Import your generated (nixos-generate-config) hardware configuration
-    ./hardware-configuration.nix
-    ./erase_your_darlings.nix
-    ./podman.nix
-    ../modules/system/devices/touchpad
-    ../modules/system/devices/gpu/nvidia
+    ./hardware.nix
+
+    ../../profiles/physical_machine/laptop
+
+    ../../modules/system/stateless_system.nix
+    ../../modules/system/devices/touchpad
+    ../../modules/system/devices/gpu/nvidia
   ];
 
   # =========================
@@ -37,72 +39,13 @@
     supportedFilesystems = [ "btrfs" ];
   };
 
-  services.tlp.enable = true;
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-
   # =========================
   # BEGIN GENERAL CONFIG
   # =========================
-  nix = {
-    # This will add each flake input as a registry
-    # To make nix3 commands consistent with your flake
-    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
-
-    # This will additionally add your inputs to the system's legacy channels
-    # Making legacy nix commands consistent as well, awesome!
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
-  };
-
-  nix = {
-    settings = {
-      experimental-features = "nix-command flakes";
-      auto-optimise-store = true; # Deduplicate and optimize nix store
-    };
-  };
-
-  services.openssh = {
-    enable = true;
-    permitRootLogin = "no"; # Forbid root login through SSH.
-    passwordAuthentication = false; # Use keys only
-  };
-
   networking = {
     hostName = "obelisk"; # FIXME
     networkmanager.enable = true;
   };
-
-  i18n.defaultLocale = "en_US.utf8";
-
-  services.xserver = {
-    enable = true;
-    autorun = true;
-    layout = "us";
-    xkbVariant = "dvorak";
-    xkbOptions = "caps:swapescape"; # use caps lock as escape key
-
-    desktopManager.xterm.enable = false;
-    displayManager = {
-      defaultSession = "none+i3"; # no desktop, i3 tiling wm
-      lightdm.enable = true;
-    };
-
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [
-        dmenu # app launch bar (ctrl + E)
-        i3status # default i3 status bar
-        i3lock # lock/login screen
-      ];
-    };
-  };
-
-  # Enable automatic location
-  services.geoclue2.enable = true; # TODO: restrict to specific users
-  location.provider = "geoclue2";
-  services.localtimed.enable = true;
-
-  console.keyMap = "dvorak";
 
   users.users = {
     djinn = {
@@ -115,12 +58,6 @@
       # TODO: replace sudo with doas
       extraGroups = [ "wheel" "networkmanager" "docker" ];
     };
-  };
-
-  # TODO: replace sudo with doas?
-  security.sudo = {
-    enable = true;
-    execWheelOnly = true; # patch for CVE-2021-3156
   };
 
   # create sym link to wallpaper file in repo
