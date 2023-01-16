@@ -3,7 +3,13 @@
 # Scope: Log aggregator
 { config, ... }: {
 
-  config.services.loki = {
+  networking.firewall.allowedTCPPorts = [ 
+    config.services.loki.configuration.server.http_listen_port
+    config.services.promtail.configuration.server.http_listen_port
+    config.services.promtail.configuration.server.grpc_listen_port
+  ];
+
+  services.loki = {
     enable = true;
 
     configuration = {
@@ -22,7 +28,6 @@
             };
             replication_factor = 1;
           };
-          final_sleep = "0s";
         };
         # Any chunk not receiving new logs in this time will be flushed
         chunk_idle_period = "1h";
@@ -50,13 +55,13 @@
 
       storage_config = {
         boltdb_shipper = {
-          active_index_directory = "/persist/var/lib/loki/boltdb-shipper-active";
-          cache_location = "/persist/var/lib/loki/boltdb-shipper-cache";
+          active_index_directory = "/var/lib/loki/boltdb-shipper-active";
+          cache_location = "/var/lib/loki/boltdb-shipper-cache";
           cache_ttl = "24h"; # Can be increased for faster performance over longer query periods, uses more disk space
           shared_store = "filesystem";
         };
         filesystem = {
-          directory = "/persist/var/lib/loki/chunks";
+          directory = "/var/lib/loki/chunks";
         };
       };
 
@@ -75,7 +80,7 @@
       };
 
       compactor = {
-        working_directory = "/persist/var/lib/loki";
+        working_directory = "/var/lib/loki";
         shared_store = "filesystem";
         compactor_ring = {
           kvstore = {
@@ -86,7 +91,7 @@
     };
   };
 
-  config.services.promtail = {
+  services.promtail = {
     enable = true;
     configuration = {
       server = {
@@ -105,7 +110,7 @@
           max_age = "24h";
           labels = {
             job = "systemd-journal";
-            host = "obelisk"; # TODO: get value from cfg
+            host = config.networking.hostName;
           };
         };
         relabel_configs = [{
