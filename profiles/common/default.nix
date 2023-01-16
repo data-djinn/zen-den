@@ -33,4 +33,14 @@
   };
 
   console.keyMap = "dvorak";
+
+  services.prometheus = {
+    exporters = {
+      node = {
+        enable = true;
+        enabledCollectors = [ "systemd" ];
+        port = 3011;
+      };
+    };
+  };
 }

@@ -20,14 +20,15 @@
 
     umount /mnt    
 
-    mkdir -p /persist/etc/NetworkManager
-    mkdir -p /persist/etc/ssh
-    mkdir -p /persist/var/lib/acme
-    mkdir -p /persist/var/lib/bluetooth
+    mkdir -pm 755 /persist/etc/NetworkManager
+    mkdir -pm 755 /persist/etc/ssh
+
+    mkdir -pm 755 /persist/var/lib
+    mkdir /persist/var/lib/acme
+    mkdir /persist/var/lib/bluetooth
   '';
 
   environment.etc = {
-    nixos.source = "/persist/etc/nixos";
     "NetworkManager/system-connections".source = "/persist/etc/NetworkManager/system-connections";
     adjtime.source = "/persist/etc/adjtime"; # persist files' last modified date across reboots
     machine-id.source = "/persist/etc/machine-id";
@@ -36,11 +37,11 @@
   services.openssh = {
     hostKeys = [
       {
-        path = "/persist/ssh/ssh_host_ed25519_key";
+        path = "/persist/etc/ssh/ssh_host_ed25519_key";
         type = "ed25519";
       }
       {
-        path = "/persist/ssh/ssh_host_rsa_key";
+        path = "/persist/etc/ssh/ssh_host_rsa_key";
         type = "rsa";
         bits = 4096;
       }
@@ -50,5 +51,6 @@
   systemd.tmpfiles.rules = [
     "L /var/lib/acme - - - - /persist/var/lib/acme"
     "L /var/lib/bluetooth - - - - /persist/var/lib/bluetooth"
+    "L /var/lib/prometheus - - - - /persist/var/lib/prometheus"
   ];
 }
