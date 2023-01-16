@@ -25,6 +25,7 @@
     ../../modules/services/prometheus
     ../../modules/services/loki
     ../../modules/services/grafana
+    ../../modules/services/nginx
   ];
 
   # =========================

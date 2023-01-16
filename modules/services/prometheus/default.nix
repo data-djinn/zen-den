@@ -1,5 +1,7 @@
 { config, ... }: {
 
+  networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
+
   services.prometheus = {
     enable = true;
     port = 3010;

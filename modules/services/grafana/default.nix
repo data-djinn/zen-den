@@ -1,5 +1,7 @@
 { config, pkgs, ... }: {
 
+  networking.firewall.allowedTCPPorts = [ config.services.grafana.port ];
+
   services.grafana = {
     enable = true;
     domain = "grafana.zen-den.net";
