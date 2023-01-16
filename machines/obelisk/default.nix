@@ -21,6 +21,10 @@
     ../../modules/system/stateless_system.nix
     ../../modules/system/devices/touchpad
     ../../modules/system/devices/gpu/nvidia
+
+    ../../modules/services/prometheus
+    ../../modules/services/loki
+    ../../modules/services/grafana
   ];
 
   # =========================
