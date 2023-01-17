@@ -15,6 +15,12 @@
     # TODO: "logfile=/persist/var/log/sudo.log lecture=\"never\""
   };
 
+  security.audit = {
+    enable = true;
+    rules = [ "-a exit,always -F arch=b64 -S execve" ];
+  };
+  security.auditd.enable = true;
+
   #======== NETWORK =========
   services.tlp.enable = true;
 
