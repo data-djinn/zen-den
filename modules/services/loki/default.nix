@@ -11,6 +11,8 @@
 
   services.loki = {
     enable = true;
+    dataDir = "/persist/var/lib/loki";
+
 
     configuration = {
       auth_enabled = false;
@@ -55,15 +57,16 @@
 
       storage_config = {
         boltdb_shipper = {
-          active_index_directory = "/var/lib/loki/boltdb-shipper-active";
-          cache_location = "/var/lib/loki/boltdb-shipper-cache";
+          active_index_directory = "/persist/var/lib/loki/boltdb-shipper-active";
+          cache_location = "/persist/var/lib/loki/boltdb-shipper-cache";
           cache_ttl = "24h"; # Can be increased for faster performance over longer query periods, uses more disk space
           shared_store = "filesystem";
         };
         filesystem = {
-          directory = "/var/lib/loki/chunks";
+          directory = "/persist/var/lib/loki/chunks";
         };
       };
+
 
       limits_config = {
         reject_old_samples = true;
@@ -80,7 +83,7 @@
       };
 
       compactor = {
-        working_directory = "/var/lib/loki";
+        working_directory = "/persist/var/lib/loki";
         shared_store = "filesystem";
         compactor_ring = {
           kvstore = {
