@@ -1,5 +1,27 @@
 { inputs, lib, config, pkgs, ... }:
 {
+  #======== SECURITY =========
+  networking.firewall.enable = true;
+
+  services.openssh = {
+    enable = true;
+    permitRootLogin = "no"; # Forbid root login through SSH.
+    passwordAuthentication = false; # Use keys only
+  };
+
+  security.sudo = {
+    enable = true;
+    execWheelOnly = true; # patch for CVE-2021-3156
+    # TODO: "logfile=/persist/var/log/sudo.log lecture=\"never\""
+  };
+
+  #======== NETWORK =========
+  services.tlp.enable = true;
+
+  #======== DEFAULTS =========
+  i18n.defaultLocale = "en_US.utf8";
+  console.keyMap = "dvorak";
+  
   nix = {
     # This will add each flake input as a registry
     # To make nix3 commands consistent with your flake
@@ -10,12 +32,6 @@
     nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
   };
 
-  services.tlp.enable = true;
-  services.openssh = {
-    enable = true;
-    permitRootLogin = "no"; # Forbid root login through SSH.
-    passwordAuthentication = false; # Use keys only
-  };
 
   nix = {
     settings = {
@@ -24,16 +40,7 @@
     };
   };
 
-  i18n.defaultLocale = "en_US.utf8";
-
-  # TODO: replace sudo with doas?
-  security.sudo = {
-    enable = true;
-    execWheelOnly = true; # patch for CVE-2021-3156
-  };
-
-  console.keyMap = "dvorak";
-
+  #======== MONITORING =========
   services.prometheus = {
     exporters = {
       node = {
