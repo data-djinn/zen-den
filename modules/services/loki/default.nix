@@ -1,7 +1,12 @@
 # Loki Server
 #
 # Scope: Log aggregator
-{ config, ... }: {
+{ config, pkgs, ... }: {
+
+  boot.initrd.postMountCommands = pkgs.lib.mkBefore ''
+    mkdir -pm 700 /persist/var/lib/loki
+    chown loki:loki /persist/var/lib/loki
+  '';
 
   networking.firewall.allowedTCPPorts = [ 
     config.services.loki.configuration.server.http_listen_port

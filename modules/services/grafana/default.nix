@@ -1,5 +1,10 @@
 { config, pkgs, ... }: {
 
+  boot.initrd.postDeviceCommands = pkgs.lib.mkBefore ''
+    mkdir -pm 700 /persist/var/lib/grafana
+    chown grafana:grafana /persist/var/lib/grafana
+  '';
+
   networking.firewall.allowedTCPPorts = [ config.services.grafana.port ];
 
   services.grafana = {
