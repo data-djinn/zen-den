@@ -28,6 +28,9 @@
   i18n.defaultLocale = "en_US.utf8";
   console.keyMap = "dvorak";
   
+  # enable bash completion for system packages
+  environment.pathsToLink = [ "/share/bash-completion" ];
+
   nix = {
     # This will add each flake input as a registry
     # To make nix3 commands consistent with your flake
