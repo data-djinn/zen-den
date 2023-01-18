@@ -1,7 +1,10 @@
-{ inputs, lib, config, pkgs, ... }: {
+{ inputs, lib, config, pkgs, ... }:
   # This is your home-manager configuration file
   # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-
+let
+  primary_user = "djinn";  # TODO: make dynamic
+in
+{
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors), use something like:
     # inputs.nix-colors.homeManagerModule
@@ -9,8 +12,8 @@
   ];
 
   home = {
-    username = "djinn";
-    homeDirectory = "/home/djinn";
+    username = "${primary_user}";
+    homeDirectory = "/home/${primary_user}";
 
     keyboard = {
       layout = "us";
@@ -119,6 +122,10 @@
       };
     };
   };
+
+    xsession.initExtra = ''
+      ln -sf /home/${primary_user}/nix-config/modules/home-manager/nix_flakes_background.jpeg /home/${primary_user}/.background-image
+    '';
 
   manual.html.enable = true; # view with `home-manager-help`
 
