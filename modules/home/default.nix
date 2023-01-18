@@ -51,6 +51,7 @@ in
       ];
   };
 
+  fonts.fontconfig.enable = true;  # access fonts in home.packages
   programs = {
     bash = {
       enable = true;
@@ -84,7 +85,9 @@ in
     alacritty = {
       enable = true;
       settings = {
-        font.size = 6.0;
+        font = {
+          size = 8.0;
+        };
       };
     };
 
@@ -110,22 +113,22 @@ in
     };
   };
 
-  # reduce blue light after sunset
-  services.redshift = {
+  # ===== Sway (Wayland Tiling Window Manager) =====
+  wayland.windowManager.sway = {
     enable = true;
-    provider = "geoclue2";
-    temperature.day = 6500;
-    temperature.night = 3000;
-    settings = {
-      redshift = {
-        brightness-night = 0.4;
+    config = {
+      input = {
+        "*" = {  # TODO: bash script to find current keyboard identifier
+          xkb_layout = "us";
+          xkb_variant = "dvorak"; } ;
       };
+      terminal = "alacritty";
     };
   };
 
-    xsession.initExtra = ''
-      ln -sf /home/${primary_user}/zen-den/modules/home/nix_flakes_background.jpeg /home/${primary_user}/.background-image
-    '';
+  # reduce blue light after sunset TODO: gammastep
+
+
 
   manual.html.enable = true; # view with `home-manager-help`
 

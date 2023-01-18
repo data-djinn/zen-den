@@ -21,6 +21,8 @@
   };
   security.auditd.enable = true;
 
+  security.polkit.enable = true;  # used by sway wm
+
   #======== NETWORK =========
   services.tlp.enable = true;
 
