@@ -10,9 +10,6 @@ let # env vars required for finegrained
   '';
 in
 {
-  # Install latest nvidia driver
-  services.xserver.videoDrivers = [ "nvidia" ];
-
   # install shell script defined above
   environment.systemPackages = [ nvidia-offload ];
 

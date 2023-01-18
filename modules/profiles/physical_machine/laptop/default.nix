@@ -3,7 +3,6 @@
 {
   imports = [
     ../../common
-    ../pc
 
     ../../../devices/touchpad
     ../../../services/location
