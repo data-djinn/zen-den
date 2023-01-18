@@ -65,15 +65,6 @@
     };
   };
 
-  # create sym link to wallpaper file in repo
-  systemd.user.services.wallpaper-setter = {
-    script = ''
-      ln -sf ${config.users.users.djinn.home}/nix-config/nixos/nix_flakes_background.jpeg ${config.users.users.djinn.home}/.background-image
-    '';
-    wantedBy = [ "graphical-session.target" ];
-    partOf = [ "graphical-session.target" ];
-  };
-
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "22.05";
 }
