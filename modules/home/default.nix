@@ -97,7 +97,7 @@ in
 
     home-manager = {
       enable = true;
-      # TODO: fix this path = "$HOME/nix-config/home-manager";
+      # TODO: fix this path = "$HOME/zen-den/home-manager";
     };
 
     rbw = {
@@ -124,7 +124,7 @@ in
   };
 
     xsession.initExtra = ''
-      ln -sf /home/${primary_user}/nix-config/modules/home/nix_flakes_background.jpeg /home/${primary_user}/.background-image
+      ln -sf /home/${primary_user}/zen-den/modules/home/nix_flakes_background.jpeg /home/${primary_user}/.background-image
     '';
 
   manual.html.enable = true; # view with `home-manager-help`
