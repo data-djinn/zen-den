@@ -124,7 +124,7 @@ in
   };
 
     xsession.initExtra = ''
-      ln -sf /home/${primary_user}/nix-config/modules/home-manager/nix_flakes_background.jpeg /home/${primary_user}/.background-image
+      ln -sf /home/${primary_user}/nix-config/modules/home/nix_flakes_background.jpeg /home/${primary_user}/.background-image
     '';
 
   manual.html.enable = true; # view with `home-manager-help`

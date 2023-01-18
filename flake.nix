@@ -33,13 +33,6 @@
         default = import ./overlay { inherit inputs; };
       };
 
-      # Reusable nixos modules you might want to export
-      # These are usually stuff you would upstream into nixpkgs
-      nixosModules = import ./modules/nixos;
-      # Reusable home-manager modules you might want to export
-      # These are usually stuff you would upstream into home-manager
-      homeManagerModules = import ./modules/home-manager;
-
       # Devshell for bootstrapping
       # Accessible through 'nix develop' or 'nix-shell' (legacy)
       devShells = forAllSystems (system: {
@@ -75,8 +68,7 @@
         obelisk = nixpkgs.lib.nixosSystem {
           pkgs = legacyPackages.x86_64-linux;
           specialArgs = { inherit inputs; }; # Pass flake inputs to our config
-          modules = (builtins.attrValues nixosModules) ++ [
-            # > Our main nixos configuration file <
+          modules =  [
             ./machines/obelisk
           ];
         };
@@ -86,9 +78,9 @@
         "djinn@obelisk" = home-manager.lib.homeManagerConfiguration {
           pkgs = legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-          modules = (builtins.attrValues homeManagerModules) ++ [
+          modules = [
             # > Our main home-manager configuration file <
-            ./home-manager/home.nix
+            ./modules/home
           ];
         };
       };
