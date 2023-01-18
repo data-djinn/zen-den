@@ -41,6 +41,7 @@ in
       [
         curl
         gh
+        jq
         librewolf
         obsidian # TODO: add overlay to include plugins & vault already connected
         pfetch
