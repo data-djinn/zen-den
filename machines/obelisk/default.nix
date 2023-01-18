@@ -16,11 +16,11 @@
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware.nix
 
-    ../../profiles/physical_machine/laptop
+    ../../modules/profiles/physical_machine/laptop
 
-    ../../modules/system/stateless_system.nix
-    ../../modules/system/devices/gpu/nvidia
+    ../../modules/devices/gpu/nvidia
 
+    ../../modules/services/amnesia
     ../../modules/services/prometheus
     ../../modules/services/loki
     ../../modules/services/grafana
