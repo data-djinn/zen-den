@@ -53,6 +53,7 @@ in
   };
 
   fonts.fontconfig.enable = true;  # access fonts in home.packages
+
   programs = {
     bash = {
       enable = true;
@@ -121,17 +122,15 @@ in
       input = {
         "*" = {  # TODO: bash script to find current keyboard identifier
           xkb_layout = "us";
-          xkb_variant = "dvorak"; } ;
+          xkb_variant = "dvorak";
+          xkb_options = "caps:swapescape";
+        } ;
       };
       terminal = "alacritty";
     };
   };
 
   # reduce blue light after sunset TODO: gammastep
-
-
-
-  manual.html.enable = true; # view with `home-manager-help`
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "22.05";
