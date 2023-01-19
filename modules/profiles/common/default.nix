@@ -29,6 +29,12 @@
   #======== DEFAULTS =========
   i18n.defaultLocale = "en_US.utf8";
   console.keyMap = "dvorak";
+
+  # align fonts to monitor's pixel grid
+  fonts ={
+    enableDefaultFonts = true;
+    fontconfig.hinting.style = "hintfull";
+  };
   
   # enable bash completion for system packages
   environment.pathsToLink = [ "/share/bash-completion" ];
