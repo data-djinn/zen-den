@@ -6,9 +6,8 @@ let
 in
 {
   imports = [
-    # If you want to use home-manager modules from other flakes (such as nix-colors), use something like:
-    # inputs.nix-colors.homeManagerModule
-    ./neovim/neovim.nix
+    ./firefox
+    ./neovim
   ];
 
   home = {
@@ -43,7 +42,6 @@ in
         curl
         gh
         jq
-        librewolf
         obsidian # TODO: add overlay to include plugins & vault already connected
         pfetch
         protonvpn-cli
