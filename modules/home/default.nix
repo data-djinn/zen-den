@@ -39,6 +39,7 @@ in
         python-with-linters = python3.withPackages python-linters;
       in
       [
+        brightnessctl
         curl
         gh
         jq
@@ -130,7 +131,12 @@ in
     };
   };
 
-  # reduce blue light after sunset TODO: gammastep
+  services.wlsunset = {
+    enable = true;
+    latitude = "40.7";
+    longitude = "-73.9";
+    gamma = ".4";
+  };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "22.05";
