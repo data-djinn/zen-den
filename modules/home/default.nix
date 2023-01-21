@@ -76,10 +76,6 @@ in
         "..." = "cd ../..";
         count = "find . -type f | wc -l";
         cpv = "rsync -ah --info=progress2";
-        gs = "git fetch && git status";
-        ga = "git fetch && git add";
-        gc = "git commit -m";
-        gd = "git diff";
       };
     };
 
@@ -97,6 +93,36 @@ in
       userName = "data-djinn";
       userEmail = "data-djinn@pm.me";
       diff-so-fancy.enable = true;
+      aliases = {
+        a = "add";
+        c = "commit -m";
+        ca = "commit --amend";
+        can = "commit --amend --no-edit";
+        co = "checkout";
+        d = "diff";
+        f = "fetch";
+        fo = "fetch origin";
+        fu = "fetch upstream";
+        lg = "log --graph --decorate --abbrev-commit";
+        lga = "log --graph --decorate --abbrev-commit --all";
+        r = "remote";
+        ra = "remode add";
+        rr = "remote rm";
+        rv = "remote -v";
+        s = "status";
+      };
+
+      extraConfig  = {
+        merge = {
+          tool = "vimdiff";
+          conflictstyle = "diff3";
+        };
+        pull = {
+          rebase = true;
+        };
+        gpg.format = "ssh";
+        user.signingkey = "$/home/{primary_user}/.ssh/id_ed255519.pub";
+      };
     };
 
     home-manager = {
