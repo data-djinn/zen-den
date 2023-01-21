@@ -6,7 +6,6 @@
       darkreader
       clearurls
       cookie-autodelete
-      libredirect
       ublock-origin
     ];
     profiles.default = {
@@ -45,6 +44,7 @@
         "Google".metaData.alias = "@g";
         "Wikipedia".metaData.alias = "@wiki";
       };
+      search.default = "DuckDuckGo";
       search.force = true;
       settings = {
         "beacon.enabled" = false;
