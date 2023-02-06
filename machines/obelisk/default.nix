@@ -25,6 +25,7 @@
     ../../modules/services/loki
     ../../modules/services/grafana
     ../../modules/services/nginx
+    ../../modules/services/home_assistant/server
   ];
 
   # =========================
