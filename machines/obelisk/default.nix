@@ -16,17 +16,11 @@
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware.nix
 
-    ../../modules/profiles/physical_machine/laptop
+    ../../modules/profiles/common
 
-    ../../modules/devices/gpu/nvidia
-
-    ../../modules/services/amnesia
-    ../../modules/services/prometheus
-    ../../modules/services/loki
-    ../../modules/services/grafana
-    ../../modules/services/nginx
-    ../../modules/services/home_assistant/server
+    ../../modules/services/k3s
   ];
+
 
   # =========================
   # CUSTOM BOOT CONFIG
