@@ -23,7 +23,8 @@ in
     sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
-      TERMINAL = "alacritty";
+      TERMINAL = "foot";
+      WLR_NO_HARDWARE_CURSORS = "1";
     };
 
     # add user packages here!
@@ -78,15 +79,7 @@ in
         cpv = "rsync -ah --info=progress2";
       };
     };
-
-    alacritty = {
-      enable = true;
-      settings = {
-        font = {
-          size = 8.0;
-        };
-      };
-    };
+    foot.enable = true;
 
     git = {
       enable = true;
@@ -125,6 +118,8 @@ in
       };
     };
 
+    gpg.enable = true;
+
     home-manager = {
       enable = true;
       # TODO: fix this path = "$HOME/zen-den/home-manager";
@@ -151,15 +146,15 @@ in
           xkb_options = "caps:swapescape";
         } ;
       };
-      terminal = "alacritty";
+      terminal = "foot";
     };
+    wrapperFeatures.gtk = true;
   };
 
   services.wlsunset = {
     enable = true;
     latitude = "40.7";
     longitude = "-73.9";
-    gamma = ".4";
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
