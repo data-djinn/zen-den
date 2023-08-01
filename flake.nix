@@ -17,7 +17,7 @@
     # nix-colors.url = "github:misterio77/nix-colors";
   };
 
-  outputs = { nixpkgs, home-manager, ... }@inputs:
+  outputs = { nixpkgs, home-manager, hardware, ... }@inputs:
     let
       forAllSystems = nixpkgs.lib.genAttrs [
         "aarch64-linux"
@@ -72,10 +72,18 @@
             ./machines/obelisk
           ];
         };
+        kraken = nixpkgs.lib.nixosSystem {
+          pkgs = legacyPackages.x86_64-linux;
+          specialArgs = { inherit inputs; };
+          modules =  [
+            hardware.nixosModules.common-cpu-intel-cpu-only
+            ./machines/kraken
+          ];
+        };
       };
 
       homeConfigurations = {
-        "djinn@obelisk" = home-manager.lib.homeManagerConfiguration {
+        "djinn@kraken" = home-manager.lib.homeManagerConfiguration {
           pkgs = legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
           modules = [
