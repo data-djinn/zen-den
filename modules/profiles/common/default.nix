@@ -5,8 +5,8 @@
 
   services.openssh = {
     enable = true;
-    permitRootLogin = "no"; # Forbid root login through SSH.
-    passwordAuthentication = false; # Use keys only
+    PermitRootLogin = "no"; # Forbid root login through SSH.
+    PasswordAuthentication = false; # Use keys only
   };
 
   security.sudo = {
