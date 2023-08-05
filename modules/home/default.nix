@@ -17,7 +17,10 @@ in
     keyboard = {
       layout = "us";
       variant = "dvorak";
-      options = [ "caps: swapescape" ]; # use caps lock as escape key
+      options = [
+        "caps: swapescape"  # use caps lock as escape key
+        "ctrl: swap_ralt_rctl"
+      ];
     };
 
     sessionVariables = {
@@ -148,8 +151,8 @@ in
         "*" = {  # TODO: bash script to find current keyboard identifier
           xkb_layout = "us";
           xkb_variant = "dvorak";
-          xkb_options = "caps:swapescape";
-        } ;
+          xkb_options = "caps:swapescape,ctrl:swap_lalt_lctl,ctrl:swap_ralt_rctl";
+        };
       };
       terminal = "alacritty";
     };
