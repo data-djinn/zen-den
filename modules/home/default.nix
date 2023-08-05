@@ -1,57 +1,60 @@
 { inputs, lib, config, pkgs, ... }:
   # This is your home-manager configuration file
   # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-let
-  primary_user = "djinn";  # TODO: make dynamic
-in
-{
-  imports = [
-    ./firefox
-    ./neovim
-  ];
+  let
+    primary_user = "djinn";  # TODO: make dynamic
+  in
+  {
+    imports = [
+      ./firefox
+      ./neovim
+    ];
 
-  home = {
-    username = "${primary_user}";
-    homeDirectory = "/home/${primary_user}";
+    home = {
+      username = "${primary_user}";
+      homeDirectory = "/home/${primary_user}";
 
-    keyboard = {
-      layout = "us";
-      variant = "dvorak";
-      options = [
-        "caps: swapescape"  # use caps lock as escape key
-        "ctrl: swap_ralt_rctl"
-      ];
-    };
+      keyboard = {
+        layout = "us";
+        variant = "dvorak";
+        options = [
+          "caps: swapescape"  # use caps lock as escape key
+          "ctrl: swap_ralt_rctl"
+        ];
+      };
 
     sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
       TERMINAL = "alacritty";
+      GPG_TTY= "$(tty)";
     };
 
     # add user packages here!
     packages = with pkgs;
-      let
-        python-linters = python-packages: with python-packages; [
-          flake8
-          flake8-bugbear
-          bandit
-          black
-        ];
-        python-with-linters = python3.withPackages python-linters;
-      in
-      [
-        brightnessctl
-        curl
-        gh
-        jq
-        obsidian # TODO: add overlay to include plugins & vault already connected
-        pfetch
-        protonvpn-cli
-        python-with-linters
-        ripgrep
-        zenith
+    let
+      python-linters = python-packages: with python-packages; [
+        flake8
+        flake8-bugbear
+        bandit
+        black
       ];
+      python-with-linters = python3.withPackages python-linters;
+    in
+    [
+      brightnessctl
+      chatgpt-cli
+      curl
+      gh
+      gnupg
+      jq
+      obsidian # TODO: add overlay to include plugins & vault already connected
+      pfetch
+      protonvpn-cli
+      python-with-linters
+      ripgrep
+      zenith
+    ];
   };
 
   fonts.fontconfig.enable = true;  # access fonts in home.packages
@@ -95,12 +98,16 @@ in
       enable = true;
       userName = "data-djinn";
       userEmail = "data-djinn@pm.me";
+      signing = {
+        signByDefault = true;
+        key = "A974448D85A49F02";
+      };
       diff-so-fancy.enable = true;
       aliases = {
         a = "add";
-        c = "commit -m";
-        ca = "commit --amend";
-        can = "commit --amend --no-edit";
+        c = "commit -Sm";
+        ca = "commit -S --amend";
+        can = "commit -S --amend --no-edit";
         co = "checkout";
         d = "diff";
         f = "fetch";
@@ -123,8 +130,32 @@ in
         pull = {
           rebase = true;
         };
-        gpg.format = "ssh";
-        user.signingkey = "$/home/{primary_user}/.ssh/id_ed255519.pub";
+      };
+    };
+
+    gpg = {
+      enable = true;
+      settings = {  # copied from dr duh
+        personal-cipher-preferences = "AES256 AES192 AES";
+        personal-digest-preferences = "SHA512 SHA384 SHA256";
+        personal-compress-preferences = "ZLIB BZIP2 ZIP Uncompressed";
+        default-preference-list = "SHA512 SHA384 SHA256 AES256 AES192 AES ZLIB BZIP2 ZIP Uncompressed";
+        cert-digest-algo = "SHA512";
+        s2k-digest-algo = "SHA512";
+        s2k-cipher-algo = "AES256";
+        charset = "utf-8";
+        fixed-list-mode = true;  # show unix timestamps
+        no-comments = true;
+        no-emit-version = true;
+        no-greeting = true;
+        keyid-format = "0xlong";  # long hexadecimal key format
+        list-options = "show-uid-validity";
+        verify-options = "show-uid-validity";
+        with-fingerprint = true;
+        require-cross-certification = true;
+        no-symkey-cache = true;
+        use-agent = true;  # enable smartcard
+        throw-keyids = true;
       };
     };
 
@@ -142,6 +173,13 @@ in
       };
     };
   };
+
+  services.gpg-agent = {
+    enable = true;
+    enableSshSupport = true;
+    pinentryFlavor = "curses";
+  };
+
 
   # ===== Sway (Wayland Tiling Window Manager) =====
   wayland.windowManager.sway = {
