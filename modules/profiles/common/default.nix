@@ -3,16 +3,34 @@
   #======== SECURITY =========
   networking.firewall.enable = true;
 
+  programs.ssh.startAgent = false;
   services.openssh = {
     enable = true;
-    PermitRootLogin = "no"; # Forbid root login through SSH.
-    PasswordAuthentication = false; # Use keys only
+    permitRootLogin = "no"; # Forbid root login through SSH.
+    passwordAuthentication = false; # Use keys only
   };
+
+  # enable gpg agent with terminal pinentry
+  services.pcscd.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryFlavor = "curses";
+    enableSSHSupport = true;
+  };
+  environment.systemPackages = with pkgs; [
+    pinentry-curses
+  ];
 
   security.sudo = {
     enable = true;
     execWheelOnly = true; # patch for CVE-2021-3156
     # TODO: "logfile=/persist/var/log/sudo.log lecture=\"never\""
+  };
+
+  # pluggable auth module for universal 2FA
+  security.pam.services = {
+    login.u2fAuth = true;
+    sudo.u2fAuth = true;
   };
 
   security.audit = {
@@ -25,6 +43,9 @@
 
   #======== NETWORK =========
   services.tlp.enable = true;
+
+  #======== GUI =========
+  hardware.opengl.enable = true;
 
   #======== DEFAULTS =========
   i18n.defaultLocale = "en_US.utf8";
