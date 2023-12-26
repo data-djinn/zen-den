@@ -1,27 +1,27 @@
 { inputs, lib, config, pkgs, ... }:
-  # This is your home-manager configuration file
-  # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-  let
-    primary_user = "djinn";  # TODO: make dynamic
-  in
-  {
-    imports = [
-      ./firefox
-      ./neovim
-    ];
+# This is your home-manager configuration file
+# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
+let
+  primary_user = "djinn"; # TODO: make dynamic
+in
+{
+  imports = [
+    ./firefox
+    ./neovim
+  ];
 
-    home = {
-      username = "${primary_user}";
-      homeDirectory = "/home/${primary_user}";
+  home = {
+    username = "${primary_user}";
+    homeDirectory = "/home/${primary_user}";
 
-      keyboard = {
-        layout = "us";
-        variant = "dvorak";
-        options = [
-          "caps: swapescape"  # use caps lock as escape key
-          "ctrl: swap_ralt_rctl"
-        ];
-      };
+    keyboard = {
+      layout = "us";
+      variant = "dvorak";
+      options = [
+        "caps: swapescape" # use caps lock as escape key
+        "ctrl: swap_ralt_rctl"
+      ];
+    };
 
     sessionVariables = {
       EDITOR = "nvim";
@@ -32,32 +32,34 @@
 
     # add user packages here!
     packages = with pkgs;
-    let
-      python-linters = python-packages: with python-packages; [
-        flake8
-        flake8-bugbear
-        bandit
-        black
+      let
+        python-linters = python-packages: with python-packages; [
+          flake8
+          flake8-bugbear
+          bandit
+          black
+        ];
+        python-with-linters = python3.withPackages python-linters;
+      in
+      [
+        pre-commit
+        nixpkgs-fmt
+        brightnessctl
+        chatgpt-cli
+        curl
+        gh
+        gnupg
+        jq
+        obsidian # TODO: add overlay to include plugins & vault already connected
+        pfetch
+        protonvpn-cli
+        python-with-linters
+        ripgrep
+        zenith
       ];
-      python-with-linters = python3.withPackages python-linters;
-    in
-    [
-      brightnessctl
-      chatgpt-cli
-      curl
-      gh
-      gnupg
-      jq
-      obsidian # TODO: add overlay to include plugins & vault already connected
-      pfetch
-      protonvpn-cli
-      python-with-linters
-      ripgrep
-      zenith
-    ];
   };
 
-  fonts.fontconfig.enable = true;  # access fonts in home.packages
+  fonts.fontconfig.enable = true; # access fonts in home.packages
 
   programs = {
     bash = {
@@ -122,7 +124,7 @@
         s = "status";
       };
 
-      extraConfig  = {
+      extraConfig = {
         merge = {
           tool = "vimdiff";
           conflictstyle = "diff3";
@@ -135,7 +137,8 @@
 
     gpg = {
       enable = true;
-      settings = {  # copied from dr duh
+      settings = {
+        # copied from dr duh
         personal-cipher-preferences = "AES256 AES192 AES";
         personal-digest-preferences = "SHA512 SHA384 SHA256";
         personal-compress-preferences = "ZLIB BZIP2 ZIP Uncompressed";
@@ -144,17 +147,17 @@
         s2k-digest-algo = "SHA512";
         s2k-cipher-algo = "AES256";
         charset = "utf-8";
-        fixed-list-mode = true;  # show unix timestamps
+        fixed-list-mode = true; # show unix timestamps
         no-comments = true;
         no-emit-version = true;
         no-greeting = true;
-        keyid-format = "0xlong";  # long hexadecimal key format
+        keyid-format = "0xlong"; # long hexadecimal key format
         list-options = "show-uid-validity";
         verify-options = "show-uid-validity";
         with-fingerprint = true;
         require-cross-certification = true;
         no-symkey-cache = true;
-        use-agent = true;  # enable smartcard
+        use-agent = true; # enable smartcard
         throw-keyids = true;
       };
     };
@@ -186,7 +189,8 @@
     enable = true;
     config = {
       input = {
-        "*" = {  # TODO: bash script to find current keyboard identifier
+        "*" = {
+          # TODO: bash script to find current keyboard identifier
           xkb_layout = "us";
           xkb_variant = "dvorak";
           xkb_options = "caps:swapescape,ctrl:swap_lalt_lctl,ctrl:swap_ralt_rctl";

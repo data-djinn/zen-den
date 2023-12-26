@@ -8,7 +8,7 @@
     chown loki:loki /persist/var/lib/loki
   '';
 
-  networking.firewall.allowedTCPPorts = [ 
+  networking.firewall.allowedTCPPorts = [
     config.services.loki.configuration.server.http_listen_port
     config.services.promtail.configuration.server.http_listen_port
     config.services.promtail.configuration.server.grpc_listen_port

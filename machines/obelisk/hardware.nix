@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
@@ -14,7 +15,8 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/ab554020-3a32-4d15-aaf2-de28f09cd59c";
+    {
+      device = "/dev/disk/by-uuid/ab554020-3a32-4d15-aaf2-de28f09cd59c";
       fsType = "btrfs";
       options = [ "subvol=root" ];
     };
@@ -22,25 +24,27 @@
   boot.initrd.luks.devices."nixos-enc".device = "/dev/disk/by-uuid/aac84001-bb26-42d5-8a8a-c739f13d480e";
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/ab554020-3a32-4d15-aaf2-de28f09cd59c";
+    {
+      device = "/dev/disk/by-uuid/ab554020-3a32-4d15-aaf2-de28f09cd59c";
       fsType = "btrfs";
       options = [ "subvol=home" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/ab554020-3a32-4d15-aaf2-de28f09cd59c";
+    {
+      device = "/dev/disk/by-uuid/ab554020-3a32-4d15-aaf2-de28f09cd59c";
       fsType = "btrfs";
       options = [ "subvol=home" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/DA42-DB37";
+    {
+      device = "/dev/disk/by-uuid/DA42-DB37";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/b28d2cfb-5afc-4204-91f1-8de6be56378e"; }
-    ];
+    [{ device = "/dev/disk/by-uuid/b28d2cfb-5afc-4204-91f1-8de6be56378e"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

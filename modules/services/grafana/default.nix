@@ -31,17 +31,17 @@
         url = "http://127.0.0.1:${toString config.services.prometheus.port}";
         isDefault = true;
       }
-      {
-        name = "zen-den_logs";
-        type = "loki";
-        access = "proxy";
-        url = "http://127.0.0.1:${toString config.services.loki.configuration.server.http_listen_port}";
-      }];
+        {
+          name = "zen-den_logs";
+          type = "loki";
+          access = "proxy";
+          url = "http://127.0.0.1:${toString config.services.loki.configuration.server.http_listen_port}";
+        }];
       # FIXME: can't get this damn thing to drop
-       # deleteDatasources = [{
-       # name = "obelisk";
-       # orgId = 1;
-       # }];
+      # deleteDatasources = [{
+      # name = "obelisk";
+      # orgId = 1;
+      # }];
     };
   };
 }

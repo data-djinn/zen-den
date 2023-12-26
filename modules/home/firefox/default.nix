@@ -1,4 +1,4 @@
-{ config, pkgs, ...}: {
+{ config, pkgs, ... }: {
   programs.firefox = {
     enable = true;
     profiles.default = {
@@ -56,7 +56,7 @@
         "browser.search.suggest.enabled" = false;
         "browser.send_pings" = false;
         "browser.startup.page" = 3;
-        "browser.uidensity" = 1;  # dense
+        "browser.uidensity" = 1; # dense
         "browser.urlbar.placeholderName" = "DuckDuckGo";
         "extensions.pocket.enabled" = false;
         "network.http.referer.XOriginPolicy" = 2;
