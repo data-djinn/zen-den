@@ -39,7 +39,7 @@
   };
   security.auditd.enable = true;
 
-  security.polkit.enable = true;  # used by sway wm
+  security.polkit.enable = true; # used by sway wm
 
   #======== NETWORK =========
   services.tlp.enable = true;
@@ -52,11 +52,11 @@
   console.keyMap = "dvorak";
 
   # align fonts to monitor's pixel grid
-  fonts ={
+  fonts = {
     enableDefaultFonts = true;
     fontconfig.hinting.style = "hintfull";
   };
-  
+
   # enable bash completion for system packages
   environment.pathsToLink = [ "/share/bash-completion" ];
 

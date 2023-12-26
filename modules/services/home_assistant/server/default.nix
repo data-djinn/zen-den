@@ -3,18 +3,18 @@
     enable = true;
     qemuOvmf = true;
   };
-  
-  environment.systemPackages = with pkgs; [
-    virt-manager  # for virt-install
-    usbutils  # for lsusb
-    ];
 
-    users.users.djinn = {
-      extraGroups = [ "libvirtd" ];
-      packages = with pkgs; [
-        spice
-      ];
-    };
+  environment.systemPackages = with pkgs; [
+    virt-manager # for virt-install
+    usbutils # for lsusb
+  ];
+
+  users.users.djinn = {
+    extraGroups = [ "libvirtd" ];
+    packages = with pkgs; [
+      spice
+    ];
+  };
 
   # BRIDGE INTERFACE TO SHARE NETWORK CARD WITH HOST DEVICE
   networking = {
@@ -28,7 +28,7 @@
       }];
     };
     # open spice remote monitor port
-    firewall.allowedTCPPorts = [ 
+    firewall.allowedTCPPorts = [
       5900
     ];
   };

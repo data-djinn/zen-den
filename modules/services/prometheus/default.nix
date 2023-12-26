@@ -1,8 +1,8 @@
 { config, pkgs, ... }: {
 
-boot.initrd.postMountCommands = pkgs.lib.mkBefore ''
-  mkdir -pm 700 /persist/var/lib/prometheus
-  chown prometheus:prometheus /persist/var/lib/prometheus/
+  boot.initrd.postMountCommands = pkgs.lib.mkBefore ''
+    mkdir -pm 700 /persist/var/lib/prometheus
+    chown prometheus:prometheus /persist/var/lib/prometheus/
   '';
 
   networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];

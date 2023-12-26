@@ -68,14 +68,14 @@
         obelisk = nixpkgs.lib.nixosSystem {
           pkgs = legacyPackages.x86_64-linux;
           specialArgs = { inherit inputs; }; # Pass flake inputs to our config
-          modules =  [
+          modules = [
             ./machines/obelisk
           ];
         };
         kraken = nixpkgs.lib.nixosSystem {
           pkgs = legacyPackages.x86_64-linux;
           specialArgs = { inherit inputs; };
-          modules =  [
+          modules = [
             hardware.nixosModules.common-cpu-intel-cpu-only
             ./machines/kraken
           ];
