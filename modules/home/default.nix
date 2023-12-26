@@ -85,7 +85,17 @@
         cpv = "rsync -ah --info=progress2";
       };
     };
-    foot.enable = true;
+
+    # wayland native terminal
+    foot = {
+      enable = true;
+      settings = {
+        colors = {
+          background = "000000"; # black background
+          foreground = "FFFFFF"; # white text
+        };
+      };
+    };
 
     git = {
       enable = true;
