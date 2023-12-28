@@ -6,8 +6,10 @@
   programs.ssh.startAgent = false;
   services.openssh = {
     enable = true;
-    permitRootLogin = "no"; # Forbid root login through SSH.
-    passwordAuthentication = false; # Use keys only
+    settings = {
+      PermitRootLogin = "no"; # Forbid root login through SSH.
+      PasswordAuthentication = false; # Use keys only
+    };
   };
 
   # enable gpg agent with terminal pinentry
@@ -53,8 +55,8 @@
 
   # align fonts to monitor's pixel grid
   fonts = {
-    enableDefaultFonts = true;
-    fontconfig.hinting.style = "hintfull";
+    enableDefaultPackages = true;
+    fontconfig.hinting.style = "full";
   };
 
   # enable bash completion for system packages
@@ -68,12 +70,9 @@
     # This will additionally add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
     nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
-  };
 
-
-  nix = {
-    allowedUsers = [ "@wheel" ];
     settings = {
+      allowed-users = [ "@wheel" ];
       experimental-features = "nix-command flakes";
       auto-optimise-store = true; # Deduplicate and optimize nix store
     };
