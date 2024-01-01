@@ -19,6 +19,7 @@
     ../../modules/profiles/common
 
     # ../../modules/services/k3s
+    ../../modules/services/amnesia
     ../../modules/services/home_assistant
   ];
 
