@@ -50,7 +50,6 @@ in
         gh
         gnupg
         jq
-        obsidian # TODO: add overlay to include plugins & vault already connected
         pfetch
         protonvpn-cli
         python-with-linters
