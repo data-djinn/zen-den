@@ -89,9 +89,9 @@ in
     alacritty = {
       enable = true;
       settings = {
-        font = {
-          size = 8.0;
-        };
+        font.size = 8.0;
+        window.opacity = 0.7;
+        selection.save_to_clipboard = true;
       };
     };
 
