@@ -34,6 +34,7 @@ in
     packages = with pkgs;
       let
         python-linters = python-packages: with python-packages; [
+          pip
           flake8
           flake8-bugbear
           bandit
