@@ -37,6 +37,16 @@
     id = [ "20197478" ];
   };
 
+  users.users = {
+    djinn = {
+      isNormalUser = true;
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 E5FF8732204A802D djinn"
+      ];
+      extraGroups = [ "wheel" "docker" ];
+    };
+  };
+
   security.audit = {
     enable = true;
     rules = [ "-a exit,always -F arch=b64 -S execve" ];

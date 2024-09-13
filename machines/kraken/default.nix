@@ -47,19 +47,6 @@
     hostName = "kraken"; # FIXME
   };
 
-  users.users = {
-    djinn = {
-      # FIXME: Be sure to change this (using passwd) after rebooting!
-      initialPassword = "personwomanmancameratv";
-      isNormalUser = true;
-      openssh.authorizedKeys.keys = [
-        # TODO: Add SSH public key(s) here
-      ];
-      # TODO: replace sudo with doas
-      extraGroups = [ "wheel" "networkmanager" "docker" ];
-    };
-  };
-
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.05";
 }
