@@ -3,12 +3,18 @@
 {
   imports = [
     ../../common
-
-    ../../../devices/touchpad
   ];
 
-  services.tlp.enable = true;
-
+  # ==== TOUCHPAD ====
+  services.libinput = {
+    enable = true;
+    touchpad = {
+      disableWhileTyping = true; 
+      naturalScrolling = true;
+    };
+  };
+   
+  # ==== LID BEHAVIOR ====
   services.logind = {
     killUserProcesses = false; # on lock
     lidSwitch = "suspend-then-hibernate"; # battery power
@@ -22,5 +28,11 @@
       ";
   };
 
-  networking.networkmanager.enable = true;
+  #===== NETWORKING ====
+  services.tlp.enable = true;
+
+  networking.wireless.iwd = {
+    enable = true;
+    settings.General.EnableNetworkConfiguration = true;
+  };
 }
