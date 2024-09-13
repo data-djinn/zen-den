@@ -65,6 +65,8 @@
   i18n.defaultLocale = "en_US.utf8";
   console.keyMap = "dvorak";
 
+  time.timeZone = "America/New_York";
+
   # align fonts to monitor's pixel grid
   fonts = {
     enableDefaultPackages = true;
