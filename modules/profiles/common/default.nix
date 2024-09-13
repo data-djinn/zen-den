@@ -16,7 +16,7 @@
   services.pcscd.enable = true;
   programs.gnupg.agent = {
     enable = true;
-    pinentryFlavor = "curses";
+    pinentryPackage = pkgs.pinentry-curses;
     enableSSHSupport = true;
   };
   environment.systemPackages = with pkgs; [
@@ -30,9 +30,11 @@
   };
 
   # pluggable auth module for universal 2FA
-  security.pam.services = {
-    login.u2fAuth = true;
-    sudo.u2fAuth = true;
+  security.pam.yubico = {
+    enable = true;
+    debug = true;
+    mode = "challenge-response";
+    id = [ "20197478" ];
   };
 
   security.audit = {
