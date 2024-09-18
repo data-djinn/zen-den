@@ -50,6 +50,7 @@
         {
           name = "rust";
           language-servers = ["rust-analyzer"];
+          formatter = {command = "cargo fmt";}; # depends on rust toolchain in nix shell
           auto-format = true;
         }
         {
