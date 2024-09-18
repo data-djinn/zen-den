@@ -1,8 +1,11 @@
 # Loki Server
 #
 # Scope: Log aggregator
-{ config, pkgs, ... }: {
-
+{
+  config,
+  pkgs,
+  ...
+}: {
   boot.initrd.postMountCommands = pkgs.lib.mkBefore ''
     mkdir -pm 700 /persist/var/lib/loki
     chown loki:loki /persist/var/lib/loki
@@ -17,7 +20,6 @@
   services.loki = {
     enable = true;
     dataDir = "/persist/var/lib/loki";
-
 
     configuration = {
       auth_enabled = false;
@@ -48,16 +50,18 @@
       };
 
       schema_config = {
-        configs = [{
-          from = "2023-01-16";
-          store = "boltdb-shipper";
-          object_store = "filesystem";
-          schema = "v11";
-          index = {
-            prefix = "index_";
-            period = "24h";
-          };
-        }];
+        configs = [
+          {
+            from = "2023-01-16";
+            store = "boltdb-shipper";
+            object_store = "filesystem";
+            schema = "v11";
+            index = {
+              prefix = "index_";
+              period = "24h";
+            };
+          }
+        ];
       };
 
       storage_config = {
@@ -71,7 +75,6 @@
           directory = "/persist/var/lib/loki/chunks";
         };
       };
-
 
       limits_config = {
         reject_old_samples = true;
@@ -109,23 +112,29 @@
       positions = {
         filename = "/tmp/positions.yaml";
       };
-      clients = [{
-        url = "http://127.0.0.1:${toString config.services.loki.configuration.server.http_listen_port}/loki/api/v1/push";
-      }];
-      scrape_configs = [{
-        job_name = "journal";
-        journal = {
-          max_age = "24h";
-          labels = {
-            job = "systemd-journal";
-            host = config.networking.hostName;
+      clients = [
+        {
+          url = "http://127.0.0.1:${toString config.services.loki.configuration.server.http_listen_port}/loki/api/v1/push";
+        }
+      ];
+      scrape_configs = [
+        {
+          job_name = "journal";
+          journal = {
+            max_age = "24h";
+            labels = {
+              job = "systemd-journal";
+              host = config.networking.hostName;
+            };
           };
-        };
-        relabel_configs = [{
-          source_labels = [ "__journal__systemd_unit" ];
-          target_label = "unit";
-        }];
-      }];
+          relabel_configs = [
+            {
+              source_labels = ["__journal__systemd_unit"];
+              target_label = "unit";
+            }
+          ];
+        }
+      ];
     };
   };
 }

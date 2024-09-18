@@ -8,7 +8,7 @@
         lsp.display-messages = true;
         lsp.display-inlay-hints = true;
         file-picker = {
-          hidden = false;  # ignore hidden files
+          hidden = false; # ignore hidden files
           follow-symlinks = true;
           git-ignore = true;
           git-global = true;
@@ -56,6 +56,7 @@
         {
           name = "nix";
           language-servers = ["nil"];
+          formatter = {command = "alejandra";};
           auto-format = true;
         }
       ];

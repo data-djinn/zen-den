@@ -1,10 +1,8 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   boot.initrd.postDeviceCommands = pkgs.lib.mkBefore ''
     mkdir -p /mnt
     mount -o subvol=/ /dev/mapper/enc /mnt
-    
+
     # rm any subvolumes created by previous session before deleting /root
     btrfs subvolume list -o /mnt/root |
     cut -f9 -d' ' |
@@ -18,7 +16,7 @@
     echo "restoring blank /root subvolume..."
     btrfs subvolume snapshot /mnt/root-blank /mnt/root
 
-    umount /mnt    
+    umount /mnt
 
     mkdir -pm 755 /persist/etc/NetworkManager
     mkdir -pm 755 /persist/etc/ssh

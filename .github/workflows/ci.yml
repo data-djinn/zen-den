@@ -18,7 +18,7 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
       - name: Check Nix formatting
         run: |
-          nix-shell -p nixpkgs-fmt --run "nixpkgs-fmt --check ."
+          nix-shell -p alejandra --run "alejandra --check ."
   shell_formatting:
     runs-on: ubuntu-latest
     steps:

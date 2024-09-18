@@ -1,5 +1,10 @@
-{ inputs, lib, config, pkgs, ... }:
 {
+  inputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   #======== SECURITY =========
   networking.firewall.enable = true;
 
@@ -34,7 +39,7 @@
     enable = true;
     debug = true;
     mode = "challenge-response";
-    id = [ "20197478" ];
+    id = ["20197478"];
   };
 
   users.users = {
@@ -43,13 +48,13 @@
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 E5FF8732204A802D djinn"
       ];
-      extraGroups = [ "wheel" "docker" ];
+      extraGroups = ["wheel" "docker"];
     };
   };
 
   security.audit = {
     enable = true;
-    rules = [ "-a exit,always -F arch=b64 -S execve" ];
+    rules = ["-a exit,always -F arch=b64 -S execve"];
   };
   security.auditd.enable = true;
 
@@ -74,19 +79,19 @@
   };
 
   # enable bash completion for system packages
-  environment.pathsToLink = [ "/share/bash-completion" ];
+  environment.pathsToLink = ["/share/bash-completion"];
 
   nix = {
     # This will add each flake input as a registry
     # To make nix3 commands consistent with your flake
-    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
+    registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
 
     # This will additionally add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
     nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
     settings = {
-      allowed-users = [ "@wheel" ];
+      allowed-users = ["@wheel"];
       experimental-features = "nix-command flakes";
       auto-optimise-store = true; # Deduplicate and optimize nix store
     };
@@ -97,7 +102,7 @@
     exporters = {
       node = {
         enable = true;
-        enabledCollectors = [ "systemd" ];
+        enabledCollectors = ["systemd"];
         port = 3011;
       };
     };

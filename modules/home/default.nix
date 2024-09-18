@@ -1,10 +1,15 @@
-{ inputs, lib, config, pkgs, ... }:
+{
+  inputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 let
   primary_user = "djinn"; # TODO: make dynamic
-in
-{
+in {
   imports = [
     ./firefox
     ./helix
@@ -77,9 +82,9 @@ in
         export PS1="\n\[$(tput setaf 2)\]\t [\[$(tput setaf 34)\]\u@\[$(tput setaf 40)\]\H: \[$(tput setaf 220)\]\w\[$(tput setaf 2)\]]\[$(tput setaf 88)\]\$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/')\[$(tput setaf 2)\]\$ \[$(tput sgr0)\]"
       ''; # bash prompt: HH:MM:SS [usr@host.fullname: /curr/dir/] (git branch)
 
-      historyIgnore = [ "ls" "ll" "cd" "exit" ];
+      historyIgnore = ["ls" "ll" "cd" "exit"];
       historyFile = "/persist/.bash_history";
-      historyControl = [ "erasedups" ];
+      historyControl = ["erasedups"];
 
       shellAliases = {
         nixos-rebuild = "sudo nixos-rebuild"; # I always mess this one up!
@@ -191,10 +196,14 @@ in
     pinentryPackage = pkgs.pinentry-curses;
   };
 
-
   # ===== Sway (Wayland Tiling Window Manager) =====
   wayland.windowManager.sway = {
     enable = true;
+    extraOptions = [
+      "--verbose"
+      "--debug"
+      "--unsupported-gpu"
+    ];
     config = {
       input = {
         "*" = {
@@ -206,7 +215,10 @@ in
       };
       terminal = "alacritty";
     };
+    wrapperFeatures.gtk = true;
   };
+
+  programs.waybar.enable = true;
 
   services.wlsunset = {
     enable = true;

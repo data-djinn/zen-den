@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   services.home-assistant = {
     enable = true;
     extraComponents = [
@@ -9,8 +7,8 @@
       "radio_browser"
     ];
     config = {
-      frontend = { };
-      default_config = { };
+      frontend = {};
+      default_config = {};
       homeassistant = {
         unit_system = "imperial";
         name = "Home";

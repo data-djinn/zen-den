@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   imports = [
     ../../common
   ];
@@ -9,11 +7,11 @@
   services.libinput = {
     enable = true;
     touchpad = {
-      disableWhileTyping = true; 
+      disableWhileTyping = true;
       naturalScrolling = true;
     };
   };
-   
+
   # ==== LID BEHAVIOR ====
   services.logind = {
     killUserProcesses = false; # on lock

@@ -1,6 +1,9 @@
-{ pkgs, lib, ... }:
-
-let # env vars required for finegrained
+{
+  pkgs,
+  lib,
+  ...
+}: let
+  # env vars required for finegrained
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-GO
@@ -8,15 +11,14 @@ let # env vars required for finegrained
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec "$@"
   '';
-in
-{
+in {
   # install shell script defined above
-  environment.systemPackages = [ nvidia-offload ];
+  environment.systemPackages = [nvidia-offload];
 
   # enable secondary monitors at boot time
   specialisation = {
     external-display.configuration = {
-      system.nixos.tags = [ "external-display" ];
+      system.nixos.tags = ["external-display"];
       hardware.nvidia = {
         prime.offload.enable = lib.mkForce false;
         powerManagement = {

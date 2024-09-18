@@ -1,7 +1,5 @@
-{ pkgs, ... }:
-
-{
-  primary-user.extraGroups = [ "audio" ];
+{pkgs, ...}: {
+  primary-user.extraGroups = ["audio"];
 
   security.rtkit.enable = true;
 

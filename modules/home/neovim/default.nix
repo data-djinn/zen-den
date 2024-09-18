@@ -1,5 +1,9 @@
-{ pkgs, inputs, system, ... }:
 {
+  pkgs,
+  inputs,
+  system,
+  ...
+}: {
   programs.neovim = {
     enable = true;
     withPython3 = true;
@@ -13,7 +17,7 @@
         languageserver = {
           haskell = {
             command = "haskell-language-server-wrapper";
-            args = [ "--lsp" ];
+            args = ["--lsp"];
             rootPatterns = [
               "*.cabal"
               "stack.yaml"
@@ -21,11 +25,11 @@
               "package.yaml"
               "hie.yaml"
             ];
-            filetypes = [ "haskell" "lhaskell" ];
+            filetypes = ["haskell" "lhaskell"];
           };
           nix = {
             command = "rnix-lsp";
-            filetypes = [ "nix" ];
+            filetypes = ["nix"];
           };
         };
       };
@@ -70,17 +74,19 @@
     extraConfig = builtins.readFile ./init.vim;
 
     extraPackages = with pkgs; [
-      (python3.withPackages (ps: with ps; [
-        black
-        flake8
-      ]))
+      (python3.withPackages (ps:
+        with ps; [
+          black
+          flake8
+        ]))
       nodejs # required for coc
       haskell-language-server
       rnix-lsp
     ];
-    extraPython3Packages = (ps: with ps; [
-      jedi
-    ]);
+    extraPython3Packages = ps:
+      with ps; [
+        jedi
+      ];
   };
 
   xdg.configFile."nvim/coc-settings.json".text = builtins.readFile ./coc-settings.json;
