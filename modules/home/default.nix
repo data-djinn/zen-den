@@ -174,20 +174,21 @@ in
       # TODO: fix this path = "$HOME/zen-den/home-manager";
     };
 
-    rbw = {
+    rbw = with pkgs; {
       enable = true; # bitwarden cli client
       settings = {
         email = "data-djinn@pm.me";
         # identity_url = "?"; TODO: self-host
         lock_timeout = 300;
+        pinentry = pkgs.pinentry-curses;
       };
     };
   };
 
-  services.gpg-agent = {
+  services.gpg-agent = with pkgs; {
     enable = true;
     enableSshSupport = true;
-    pinentryFlavor = "curses";
+    pinentryPackage = pkgs.pinentry-curses;
   };
 
 
@@ -215,5 +216,5 @@ in
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "23.05";
+  home.stateVersion = "24.11";
 }
