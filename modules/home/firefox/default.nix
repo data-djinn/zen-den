@@ -3,13 +3,6 @@
     enable = true;
     profiles.default = {
       id = 0;
-      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-        bitwarden
-        darkreader
-        clearurls
-        cookie-autodelete
-        ublock-origin
-      ];
       name = "djinn";
       isDefault = true;
       search.engines = {
