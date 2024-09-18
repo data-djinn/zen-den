@@ -7,7 +7,7 @@ in
 {
   imports = [
     ./firefox
-    ./neovim
+    ./helix
   ];
 
   home = {
@@ -24,8 +24,8 @@ in
     };
 
     sessionVariables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
+      EDITOR = "hx";
+      VISUAL = "hx";
       TERMINAL = "alacritty";
       GPG_TTY= "$(tty)";
     };
@@ -44,9 +44,11 @@ in
       in
       [
         pre-commit
+        pylyzer
+        rust-analyzer
+        nil
         nixpkgs-fmt
         brightnessctl
-        chatgpt-cli
         curl
         gh
         gnupg
