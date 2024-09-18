@@ -4,7 +4,7 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    hardware.url = "github:nixos/nixos-hardware";
+    nixos-hardware.url = "github:nixos/nixos-hardware/master";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/master";
@@ -15,7 +15,7 @@
     self,
     nixpkgs,
     home-manager,
-    hardware,
+    nixos-hardware,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -43,6 +43,7 @@
       icarus = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;}; # Pass flake inputs to our config
         modules = [
+          nixos-hardware.nixosModules.common-pc-laptop-ssd
           ./machines/icarus
         ];
       };
@@ -55,7 +56,7 @@
       kraken = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
         modules = [
-          hardware.nixosModules.common-cpu-intel-cpu-only
+          nixos-hardware.nixosModules.common-cpu-intel-cpu-only
           ./machines/kraken
         ];
       };
