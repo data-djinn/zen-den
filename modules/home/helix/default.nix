@@ -23,6 +23,10 @@
           command = "pylyzer";
           args = ["--server"];
         };
+        ruff = {
+          command = "ruff";
+          args = ["server" "-q" "--preview"];
+        };
         rust-analyzer = {
           command = "rust-analyzer";
           config = {
@@ -36,7 +40,11 @@
       language = [
         {
           name = "python";
-          language-servers = ["pylyzer"];
+          language-servers = ["pylyzer" "ruff"];
+          formatter = {
+            command = "ruff";
+            args = ["format" "-"];
+          };
           auto-format = true;
         }
         {

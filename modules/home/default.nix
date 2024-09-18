@@ -27,38 +27,43 @@ in
       EDITOR = "hx";
       VISUAL = "hx";
       TERMINAL = "alacritty";
-      GPG_TTY= "$(tty)";
+      GPG_TTY = "$(tty)";
     };
 
     # add user packages here!
-    packages = with pkgs;
-      let
-        python-linters = python-packages: with python-packages; [
+    packages = with pkgs; let
+      global-python-packages = python-packages:
+        with python-packages; [
           pip
-          flake8
-          flake8-bugbear
-          bandit
-          black
+          more-itertools
+          httpx # requests with async support
         ];
-        python-with-linters = python3.withPackages python-linters;
-      in
-      [
-        pre-commit
-        pylyzer
-        rust-analyzer
-        nil
-        nixpkgs-fmt
-        brightnessctl
-        curl
-        gh
-        gnupg
-        jq
-        pfetch
-        protonvpn-cli
-        python-with-linters
-        ripgrep
-        zenith
-      ];
+      python-with-global-packages = python3.withPackages global-python-packages;
+    in [
+      pre-commit
+
+      # language servers & linters
+      pylyzer
+      ruff
+      rust-analyzer
+      nil
+      alejandra
+
+      brightnessctl
+      curl
+      gh
+      gnupg
+      jq
+      pfetch
+      protonvpn-cli
+      python-with-global-packages
+      ripgrep
+      zellij
+      # sway stuff
+      wofi
+      swaylock
+      swayidle
+    ];
   };
 
   fonts.fontconfig.enable = true; # access fonts in home.packages
