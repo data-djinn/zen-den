@@ -39,23 +39,22 @@
           };
         };
         # Any chunk not receiving new logs in this time will be flushed
-        chunk_idle_period = "1h";
+        chunk_idle_period = "30m";
         # All chunks will be flushed when they hit this age, default is 1h
-        max_chunk_age = "1h";
+        max_chunk_age = "2h";
         # Loki will attempt to build chunks up to 1.5MB, flushing if chunk_idle_period or max_chunk_age is reached first
-        chunk_target_size = 1048576;
+        chunk_target_size = 1572864;
         # Must be greater than index read cache TTL if using an index cache (Default index read cache TTL is 5m)
         chunk_retain_period = "30s";
-        max_transfer_retries = 0; # Chunk transfers disabled
       };
 
       schema_config = {
         configs = [
           {
             from = "2023-01-16";
-            store = "boltdb-shipper";
+            store = "tsdb";
             object_store = "filesystem";
-            schema = "v11";
+            schema = "v13";
             index = {
               prefix = "index_";
               period = "24h";
@@ -65,11 +64,9 @@
       };
 
       storage_config = {
-        boltdb_shipper = {
-          active_index_directory = "/persist/var/lib/loki/boltdb-shipper-active";
-          cache_location = "/persist/var/lib/loki/boltdb-shipper-cache";
-          cache_ttl = "24h"; # Can be increased for faster performance over longer query periods, uses more disk space
-          shared_store = "filesystem";
+        tsdb_shipper = {
+          active_index_directory = "/persist/var/lib/loki/tsdb-index";
+          cache_location = "/persist/var/lib/loki/tsdb-cache";
         };
         filesystem = {
           directory = "/persist/var/lib/loki/chunks";
@@ -79,10 +76,7 @@
       limits_config = {
         reject_old_samples = true;
         reject_old_samples_max_age = "168h";
-      };
-
-      chunk_store_config = {
-        max_look_back_period = "336h";
+        allow_structured_metadata = true;
       };
 
       table_manager = {
@@ -92,7 +86,6 @@
 
       compactor = {
         working_directory = "/persist/var/lib/loki";
-        shared_store = "filesystem";
         compactor_ring = {
           kvstore = {
             store = "inmemory";

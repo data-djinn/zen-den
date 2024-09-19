@@ -15,6 +15,8 @@ in {
     "${apple-silicon-support}/apple-silicon-support"
     ../../modules/profiles/physical_machine/laptop
     ../../modules/services/prometheus
+    ../../modules/services/grafana
+    ../../modules/services/loki
   ];
 
   # Use the systemd-boot EFI boot loader.
