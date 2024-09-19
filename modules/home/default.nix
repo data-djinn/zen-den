@@ -59,7 +59,7 @@ in {
       gh
       gnupg
       jq
-      pfetch
+      fastfetch
       protonvpn-cli
       python-with-global-packages
       ripgrep
@@ -78,7 +78,7 @@ in {
       enable = true;
 
       initExtra = ''
-        pfetch
+        fastfetch
         export PS1="\n\[$(tput setaf 2)\]\t [\[$(tput setaf 34)\]\u@\[$(tput setaf 40)\]\H: \[$(tput setaf 220)\]\w\[$(tput setaf 2)\]]\[$(tput setaf 88)\]\$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/')\[$(tput setaf 2)\]\$ \[$(tput sgr0)\]"
       ''; # bash prompt: HH:MM:SS [usr@host.fullname: /curr/dir/] (git branch)
 
