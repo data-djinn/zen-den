@@ -6,16 +6,74 @@
   pkgs,
   ...
 }: {
-  boot.initrd.postMountCommands = pkgs.lib.mkBefore ''
-    mkdir -pm 700 /persist/var/lib/loki
-    chown loki:loki /persist/var/lib/loki
-  '';
-
   networking.firewall.allowedTCPPorts = [
     config.services.loki.configuration.server.http_listen_port
     config.services.promtail.configuration.server.http_listen_port
     config.services.promtail.configuration.server.grpc_listen_port
   ];
+
+  systemd.services.loki = {
+    after = ["network-online.target" "loki-init.service"];
+    wants = ["network-online.target"];
+    requires = ["loki-init.service"];
+    serviceConfig = {
+      User = "loki";
+      Group = "loki";
+      ReadWritePaths = [ "${config.services.loki.dataDir}" ];
+      ExecStartPre = [
+        "${pkgs.coreutils}/bin/mkdir -p ${config.services.loki.dataDir}"
+      ];
+
+      # restrict capabilities
+      CapabilityBoundingSet = "";
+
+      #ProtectSystem = true; # root filesystem read-only
+      ProtectHome = true; # make ~/ inaccessible
+
+      # prevent modification to kernel settings, cgroups, & loading new kernel modules
+      ProtectKernelTunables = true;
+      ProtectControlGroups = true;
+      ProtectKernelModules = true;
+
+      # Network Isolation disabled to allow access to network interfaces (e.g., eth0)
+      # This is necessary for Loki to function properly, but may reduce security
+      PrivateNetwork = false;
+
+      # only necessary system calls
+      SystemCallFilter = [
+        "@system-service"
+        "~@privileged"
+        "@file-system"
+        "@network-io"
+      ];
+
+      NoNewPrivileges = true;
+      RestrictRealtime = true;
+      ProtectClock = true;
+      ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectProc = "invisible";
+      ProcSubnet = "pid";
+      LockPersonality = true;
+      MemoryDenyWriteExecute = true;
+      RestrictSUIDSGID = true;
+      RemoveIPC = true;
+    };
+  };
+
+  systemd.services.loki-init = {
+    description = "Initialize Loki data directory";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+      Group = "root";
+      ExecStart = [
+        "${pkgs.coreutils}/bin/mkdir -p ${config.services.loki.dataDir}"
+        "${pkgs.coreutils}/bin/chown -R loki:loki ${config.services.loki.dataDir}"
+      ];
+    };
+  };
 
   services.loki = {
     enable = true;
@@ -24,13 +82,16 @@
     configuration = {
       auth_enabled = false;
 
+      # Modified server and ingester configuration to use specific IP and port
       server = {
         http_listen_port = 3020;
+        http_listen_address = "${config.networking.hostName}"; # Bind to the host's IP address
       };
 
+      # Simplified ingester configuration
       ingester = {
         lifecycler = {
-          address = "127.0.0.1";
+          address = "${config.networking.hostName}";
           ring = {
             kvstore = {
               store = "inmemory";
@@ -38,14 +99,6 @@
             replication_factor = 1;
           };
         };
-        # Any chunk not receiving new logs in this time will be flushed
-        chunk_idle_period = "30m";
-        # All chunks will be flushed when they hit this age, default is 1h
-        max_chunk_age = "2h";
-        # Loki will attempt to build chunks up to 1.5MB, flushing if chunk_idle_period or max_chunk_age is reached first
-        chunk_target_size = 1572864;
-        # Must be greater than index read cache TTL if using an index cache (Default index read cache TTL is 5m)
-        chunk_retain_period = "30s";
       };
 
       schema_config = {
