@@ -5,6 +5,8 @@
   pkgs,
   ...
 }: {
+  imports = [./audit.nix];
+
   #======== SECURITY =========
   networking.firewall.enable = true;
 
@@ -28,18 +30,24 @@
     pinentry-curses
   ];
 
-  security.sudo = {
-    enable = true;
-    execWheelOnly = true; # patch for CVE-2021-3156
-    # TODO: "logfile=/persist/var/log/sudo.log lecture=\"never\""
-  };
+  security = {
+    sudo = {
+      enable = true;
+      execWheelOnly = true; # patch for CVE-2021-3156
+      # TODO: "logfile=/persist/var/log/sudo.log lecture=\"never\""
+    };
 
-  # pluggable auth module for universal 2FA
-  security.pam.yubico = {
-    enable = true;
-    debug = true;
-    mode = "challenge-response";
-    id = ["20197478"];
+    # pluggable auth module for universal 2FA
+    pam.yubico = {
+      enable = true;
+      debug = true;
+      mode = "challenge-response";
+      id = ["20197478"];
+    };
+
+    apparmor.enable = true;
+
+    polkit.enable = true; # used by sway wm
   };
 
   users.users = {
@@ -52,19 +60,15 @@
     };
   };
 
-  security.audit = {
-    enable = true;
-    rules = ["-a exit,always -F arch=b64 -S execve"];
-  };
-  security.auditd.enable = true;
-
-  security.polkit.enable = true; # used by sway wm
-
   #======== NETWORK =========
   services.tlp.enable = true;
 
   #======== GUI =========
   hardware.opengl.enable = true;
+
+  #======== HARDWARE  =========
+  hardware.enableAllFirmware = true;
+  hardware.enableRedistributableFirmware = true;
 
   #======== DEFAULTS =========
   i18n.defaultLocale = "en_US.utf8";
@@ -96,6 +100,8 @@
       auto-optimise-store = true; # Deduplicate and optimize nix store
     };
   };
+
+  nixpkgs.config = {allowUnfree = true;};
 
   #======== MONITORING =========
   services.prometheus = {
