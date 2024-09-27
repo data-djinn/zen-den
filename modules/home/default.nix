@@ -83,7 +83,6 @@ in {
       ''; # bash prompt: HH:MM:SS [usr@host.fullname: /curr/dir/] (git branch)
 
       historyIgnore = ["ls" "ll" "cd" "exit"];
-      historyFile = "/persist/.bash_history";
       historyControl = ["erasedups"];
 
       shellAliases = {
