@@ -19,7 +19,7 @@
     serviceConfig = {
       User = "loki";
       Group = "loki";
-      ReadWritePaths = [ "${config.services.loki.dataDir}" ];
+      ReadWritePaths = ["${config.services.loki.dataDir}"];
       ExecStartPre = [
         "${pkgs.coreutils}/bin/mkdir -p ${config.services.loki.dataDir}"
       ];
@@ -63,7 +63,7 @@
 
   systemd.services.loki-init = {
     description = "Initialize Loki data directory";
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = ["multi-user.target"];
     serviceConfig = {
       Type = "oneshot";
       User = "root";
@@ -85,7 +85,7 @@
       # Modified server and ingester configuration to use specific IP and port
       server = {
         http_listen_port = 3020;
-        http_listen_address = "${config.networking.hostName}"; # Bind to the host's IP address
+        http_listen_address = "127.0.0.1"; # TODO: listen on 0.0.0.0 for external clients
       };
 
       # Simplified ingester configuration
