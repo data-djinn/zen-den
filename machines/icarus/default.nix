@@ -15,9 +15,15 @@ in {
     "${apple-silicon-support}/apple-silicon-support"
     ../../modules/profiles/physical_machine/laptop
     ../../modules/services/prometheus
+    ../../modules/services/airflow
     ../../modules/services/grafana
     ../../modules/services/loki
   ];
+  services.airflow = {
+    enable = true;
+    port = 8080;
+    data_dir = "/persist/var/lib/airflow";
+  };
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
