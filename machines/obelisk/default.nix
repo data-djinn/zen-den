@@ -8,20 +8,9 @@
   ...
 }: {
   imports = [
-    # If you want to use modules from other flakes (such as nixos-hardware), use something like:
-    # inputs.hardware.nixosModules.common-cpu-amd
-    # inputs.hardware.nixosModules.common-ssd
-
-    # It's strongly recommended you take a look at
-    # https://github.com/nixos/nixos-hardware
-    # and import modules relevant to your hardware.
-
-    # Import your generated (nixos-generate-config) hardware configuration
     ./hardware.nix
-
     ../../modules/profiles/common
-
-    ../../modules/services/k3s
+    #../../modules/services/k3s
   ];
 
   # =========================
@@ -44,9 +33,9 @@
   # BEGIN GENERAL CONFIG
   # =========================
   networking = {
-    hostName = "obelisk"; # FIXME
+    hostName = "obelisk";
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  system.stateVersion = "22.05";
+  system.stateVersion = "25.05";
 }

@@ -65,8 +65,8 @@
     };
 
     homeConfigurations = {
-      "djinn@icarus" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-linux; # home-manager requires pkgs instance
+      "djinn@obelisk" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux; # home-manager requires pkgs instance
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
           ./modules/home

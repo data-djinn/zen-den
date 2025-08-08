@@ -8,50 +8,67 @@
   modulesPath,
   ...
 }: {
-  imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-  ];
-
-  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod"];
+  imports = [];
+  boot.initrd.availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" "sdhci_pci"];
   boot.initrd.kernelModules = [];
   boot.kernelModules = ["kvm-intel"];
+  boot.kernelParams = ["nouveau.config=NvClkMode=2"];
   boot.extraModulePackages = [];
-
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/ab554020-3a32-4d15-aaf2-de28f09cd59c";
-    fsType = "btrfs";
-    options = ["subvol=root"];
+  environment.sessionVariables = {
+    WLR_NO_HARDWARE_CURSORS = "1";
+    WLR_REDERER_ALLOW_SOFWWARE = "1";
   };
 
-  boot.initrd.luks.devices."nixos-enc".device = "/dev/disk/by-uuid/aac84001-bb26-42d5-8a8a-c739f13d480e";
+  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-partlabel/cryptroot";
 
-  fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/ab554020-3a32-4d15-aaf2-de28f09cd59c";
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 25; # lower if you've got lots of RAM
+    priority = 100;
+  };
+
+  fileSystems."/" = {
+    device = "/dev/mapper/cryptroot";
+    options = ["subvol=@root" "compress=zstd" "noatime"];
     fsType = "btrfs";
-    options = ["subvol=home"];
   };
 
   fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/ab554020-3a32-4d15-aaf2-de28f09cd59c";
+    device = "/dev/mapper/cryptroot";
+    options = ["subvol=@nix" "compress=zstd" "noatime"];
     fsType = "btrfs";
-    options = ["subvol=home"];
   };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/DA42-DB37";
-    fsType = "vfat";
+  fileSystems."/persist" = {
+    device = "/dev/mapper/cryptroot";
+    options = ["subvol=@persist" "compress=zstd" "noatime"];
+    fsType = "btrfs";
+    neededForBoot = true;
   };
 
-  swapDevices = [{device = "/dev/disk/by-uuid/b28d2cfb-5afc-4204-91f1-8de6be56378e";}];
+  fileSystems."/var/log" = {
+    device = "/dev/mapper/cryptroot";
+    options = ["subvol=@log" "compress=zstd" "noatime"];
+    fsType = "btrfs";
+  };
 
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  # Make critical paths persistent by bind-mounting them into /persist
+  environment.etc."/nixos".source = "/persist/etc/nixos";
+  environment.persistence."/persist" = {
+    directories = [
+      "/var/lib/bluetooth"
+      "/var/lib/nixos"
+      "/var/lib/systemd/coredump"
+      "/var/lib/NetworkManager" # wifi credentials
+      "/home"
+    ];
+    files = [
+      "/etc/machine-id"
+    ];
+  };
+
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.eno1.useDHCP = lib.mkDefault true;
-
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  nixpkgs.hostPlatform = "x86_64-linux";
+  # networking.interfaces.enp3s0f0.useDHCP = lib.mkDefault true;
 }
