@@ -19,6 +19,10 @@
     };
     languages = {
       language-server = {
+        gopls = {
+          command = "gopls";
+          args = ["-remote=auto"];
+        };
         pylyzer = {
           command = "pylyzer";
           args = ["--server"];
@@ -37,7 +41,17 @@
           command = "nil";
         };
       };
+
       language = [
+        {
+          name = "go";
+          language-servers = ["gopls"];
+          formatter = {
+            command = "gofumpt";
+            args = ["-extra"];
+          };
+          auto-format = true;
+        }
         {
           name = "python";
           language-servers = ["pylyzer" "ruff"];

@@ -53,6 +53,9 @@ in {
       rust-analyzer
       nil
       alejandra
+      gopls
+      gofumpt
+      go
 
       brightnessctl
       curl
