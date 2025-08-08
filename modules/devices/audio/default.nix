@@ -1,5 +1,5 @@
-{pkgs, ...}: {
-  primary-user.extraGroups = ["audio"];
+{
+  users.users.djinn.extraGroups = ["audio"];
 
   security.rtkit.enable = true;
 
@@ -9,8 +9,5 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-
-  environment.systemPackages = [
-    pkgs.pulseaudio
-  ];
+  hardware.pulseaudio.enable = false;
 }

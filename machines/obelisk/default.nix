@@ -10,6 +10,7 @@
   imports = [
     ./hardware.nix
     ../../modules/profiles/common
+    ../../modules/devices/audio
     #../../modules/services/k3s
   ];
 
