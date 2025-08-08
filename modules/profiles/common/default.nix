@@ -50,13 +50,16 @@
     polkit.enable = true; # used by sway wm
   };
 
+  services.seatd.enable = true;
+  services.seatd.group = "seat";
+
   users.users = {
     djinn = {
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 E5FF8732204A802D djinn"
       ];
-      extraGroups = ["wheel" "docker"];
+      extraGroups = ["wheel" "seat" "video" "docker"];
     };
   };
 

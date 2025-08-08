@@ -67,10 +67,10 @@ in {
       python-with-global-packages
       ripgrep
       zellij
-      # sway stuff
+
+      hyprpaper
+      waybar
       wofi
-      swaylock
-      swayidle
     ];
   };
 
@@ -199,28 +199,45 @@ in {
   };
 
   # ===== Sway (Wayland Tiling Window Manager) =====
-  wayland.windowManager.sway = {
+  wayland.windowManager.hyprland = {
     enable = true;
-    extraOptions = [
-      "--verbose"
-      "--debug"
-      "--unsupported-gpu"
-    ];
-    config = {
+    settings = {
       input = {
-        "*" = {
-          # TODO: bash script to find current keyboard identifier
-          xkb_layout = "us";
-          xkb_variant = "dvorak";
-          xkb_options = "caps:swapescape,ctrl:swap_lalt_lctl,ctrl:swap_ralt_rctl";
-        };
+        kb_layout = "us";
+        kb_variant = "dvorak";
       };
-      terminal = "alacritty";
+      "$terminal" = "alacritty";
+      "$mod" = "SUPER";
+      "$launcher" = "wofi --show drun";
+      bind =
+        [
+          "$mod, Return, exec, $terminal"
+          "$mod, Space, exec, $launcher"
+          "$mod, Q, killactive"
+          "$mod, H, movefocus, l"
+          "$mod, J, movefocus, d"
+          "$mod, K, movefocus, u"
+          "$mod, L, movefocus, r"
+          #"$mod SHIFT, R, reload"
+        ]
+        ++ (
+          builtins.concatLists (builtins.genList (
+              i: let
+                ws = i + 1;
+              in [
+                "$mod, code:1${toString i}, workspace, ${toString ws}"
+                "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
+              ]
+            )
+            9)
+        );
+
+      exec-once = ["hyprpaper" "waybar"];
     };
-    wrapperFeatures.gtk = true;
   };
 
   programs.waybar.enable = true;
+  programs.wofi.enable = true;
 
   services.wlsunset = {
     enable = true;
