@@ -13,6 +13,7 @@ in {
   imports = [
     ./firefox
     ./helix
+    ./themes
   ];
 
   home = {
@@ -104,9 +105,11 @@ in {
     alacritty = {
       enable = true;
       settings = {
-        font.size = 8.0;
+        font.size = 10.0;
         window.opacity = 0.7;
         selection.save_to_clipboard = true;
+        general.live_config_reload = true;
+        general.import = ["~/.config/alacritty/colors.toml"];
       };
     };
 
