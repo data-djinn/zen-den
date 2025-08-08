@@ -9,6 +9,7 @@
     # Home manager
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    impermanence.url = "github:nix-community/impermanence/master";
   };
 
   outputs = {
@@ -16,6 +17,7 @@
     nixpkgs,
     home-manager,
     nixos-hardware,
+    impermanence,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -36,7 +38,6 @@
     # Allowing you to add overlays and configure it (e.g. allowUnfree)
     # packages= forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-    nixosModules = import ./modules/nixos;
     homeManagerModules = import ./modules/home;
 
     nixosConfigurations = {
@@ -51,6 +52,7 @@
         specialArgs = {inherit inputs outputs;}; # Pass flake inputs to our config
         modules = [
           ./machines/obelisk
+          impermanence.nixosModules.impermanence
         ];
       };
       kraken = nixpkgs.lib.nixosSystem {
