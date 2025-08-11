@@ -70,12 +70,15 @@ in {
       zellij
 
       hyprpaper
+      #fonts for waybar
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.fira-code
       waybar
       wofi
     ];
   };
 
-  fonts.fontconfig.enable = true; # access fonts in home.packages
+  fonts.fontconfig.enable = true;
 
   programs = {
     bash = {
@@ -201,7 +204,7 @@ in {
     pinentryPackage = pkgs.pinentry-curses;
   };
 
-  # ===== Sway (Wayland Tiling Window Manager) =====
+  # ===== Hyprland (Wayland Tiling Window Manager) =====
   wayland.windowManager.hyprland = {
     enable = true;
     settings = {
@@ -216,12 +219,32 @@ in {
         [
           "$mod, Return, exec, $terminal"
           "$mod, Space, exec, $launcher"
+          # kill window
           "$mod, Q, killactive"
+          # focus on different window
           "$mod, H, movefocus, l"
           "$mod, J, movefocus, d"
           "$mod, K, movefocus, u"
           "$mod, L, movefocus, r"
-          #"$mod SHIFT, R, reload"
+          # Move the active window
+          "bind = $mod SHIFT, h, movewindow, l"
+          "bind = $mod SHIFT, l, movewindow, r"
+          "bind = $mod SHIFT, k, movewindow, u"
+          "bind = $mod SHIFT, j, movewindow, d"
+          # Resize the active window (coarse steps)
+          "bind = $mod ALT, h, resizeactive, -40 0"
+          "bind = $mod ALT, l, resizeactive,  40 0"
+          "bind = $mod ALT, k, resizeactive,  0 -40"
+          "bind = $mod ALT, j, resizeactive,  0  40"
+          # Fullscreen toggle
+          "bind = $mod, f, fullscreen"
+          # Float toggle + quick center
+          "bind = $mod, t, togglefloating"
+          "bind = $mod SHIFT, c, centerwindow"
+
+          # Mouse: drag/resize with Super
+          "bindm = $mod, mouse:272, movewindow" # LMB
+          "bindm = $mod, mouse:273, resizewindow" # RMB
         ]
         ++ (
           builtins.concatLists (builtins.genList (
@@ -234,9 +257,36 @@ in {
             )
             9)
         );
-
       exec-once = ["hyprpaper" "waybar"];
     };
+    extraConfig = ''
+      animations {
+        enabled = true
+
+        # Curves
+        bezier = snappy,     0.2, 0.8, 0.2, 1.0
+
+        # name, enabled, speed(multiplier), curve, style
+        animation = windows,         1, 3, snappy, popin
+        animation = windowsOut,      1, 3, snappy, popin
+        animation = border,          1, 3, linear
+        animation = borderangle,     1, 3, linear
+        animation = fade,            1, 3, linear
+        animation = fadeDim,         1, 3, linear
+        animation = workspaces,      1, 3, snappy, slide
+        animation = specialWorkspace,1, 3, snappy, slide
+        animation = layers,          1, 3, linear
+      }
+
+      layerrule = blur, waybar
+      layerrule = ignorezero, waybar
+    '';
+  };
+
+  # add symlinks where waybar expects config files
+  home.file = {
+    ".config/waybar/config.jsonc".source = ./waybar/config.jsonc;
+    ".config/waybar/style.css".source = ./waybar/style.css;
   };
 
   programs.waybar.enable = true;
